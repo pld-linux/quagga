@@ -1,4 +1,4 @@
-/var/log/zebra/bgpd.log {
+/var/log/quagga/bgpd.log {
 	missingok
 	olddir /var/log/archiv/zebra
 	postrotate

@@ -1,4 +1,4 @@
-/var/log/zebra/ospf6d.log {
+/var/log/quagga/ospf6d.log {
 	missingok
 	olddir /var/log/archiv/zebra
 	postrotate
