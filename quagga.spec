@@ -2,7 +2,7 @@ Summary:	Routing Software Suite
 Summary(pl):	Zestaw oprogramowania do routingu
 Name:		quagga
 Version:	0.96.4
-Release:	1
+Release:	2
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://www.quagga.net/download/%{name}-%{version}.tar.gz
@@ -37,8 +37,15 @@ BuildRequires:	net-snmp-devel
 BuildRequires:	pam-devel
 BuildRequires:	readline-devel >= 4.1
 BuildRequires:	texinfo
+BuildRequires:	perl-base
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
+Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):  /usr/sbin/useradd
+Requires(postun):	/usr/sbin/userdel
+Requires(postun):	/usr/sbin/groupdel
 Requires(post):	/bin/hostname
 Provides:	routingdaemon
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -49,6 +56,7 @@ Obsoletes:	zebra-xs26
 
 %define		_sysconfdir	/etc/%{name}
 %define		_includedir	%{_prefix}/include/%{name}
+%define		_localstatedir	%{_var}/run/%{name}
 
 %description
 Quagga is a routing software suite, providing implementations of
@@ -180,8 +188,8 @@ Pliki nag³ówkowe i dokumetacja do quagga.
 rm -rf $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig,logrotate.d,pam.d} \
-	$RPM_BUILD_ROOT/var/log/{archiv,}/zebra \
-	$RPM_BUILD_ROOT/var/run/zebra
+	$RPM_BUILD_ROOT/var/log/{archiv,}/%{name} \
+	$RPM_BUILD_ROOT/%{_var}/run/%{name}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -209,12 +217,39 @@ install %{SOURCE33} $RPM_BUILD_ROOT/etc/logrotate.d/ospf6d
 install %{SOURCE34} $RPM_BUILD_ROOT/etc/logrotate.d/ripd
 install %{SOURCE35} $RPM_BUILD_ROOT/etc/logrotate.d/ripngd
 
-touch $RPM_BUILD_ROOT/var/log/zebra/{zebra,bgpd,ospf6d,ospfd,ripd,ripngd}.log
+touch $RPM_BUILD_ROOT/var/log/%{name}/{zebra,bgpd,ospf6d,ospfd,ripd,ripngd}.log
 
 touch $RPM_BUILD_ROOT%{_sysconfdir}/{vtysh.conf,zebra.conf}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%pre
+if [ -n "`getgid quagga`" ]; then
+        if [ "`getgid quagga`" != "127" ]; then
+                echo "Error: group quagga doesn't have gid=127. Correct this before installing quagga." 1>&2
+                exit 1
+        fi
+else
+        /usr/sbin/groupadd -g 127 -r -f quagga
+fi
+if [ -n "`getgid quaggavty`" ]; then
+        if [ "`getgid quaggavty`" != "128" ]; then
+                echo "Error: group quaggavty doesn't have gid=128. Correct this before installing quagga." 1>&2
+                exit 1
+        fi
+else
+        /usr/sbin/groupadd -g 128 -r -f quaggavty
+fi
+
+if [ -n "`id -u quagga 2>/dev/null`" ]; then
+        if [ "`id -u quagga`" != "51" ]; then
+                echo "Error: user quagga doesn't have uid=127. Correct this before installing quagga." 1>&2
+                exit 1
+        fi
+else
+        /usr/sbin/useradd -u 127 -r -d /tmp -s /bin/false -c "Quagga User" -g quagga quagga 1>&2
+fi
 
 %post
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
@@ -319,6 +354,11 @@ fi
 
 %postun
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
+if [ "$1" = "0" ]; then
+        /usr/sbin/userdel quagga
+        /usr/sbin/groupdel quagga
+	/usr/sbin/groupdel quaggavty
+fi
 
 %files
 %defattr(644,root,root,755)
@@ -326,12 +366,12 @@ fi
 %{_infodir}/*info*
 %{_mandir}/man1/*
 %attr(755,root,root) %{_bindir}/*
-%dir %attr(750,root,root) %{_sysconfdir}
-%config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) %{_sysconfdir}/*.conf
+%dir %attr(750,root,quagga) %{_sysconfdir}
+%config(noreplace) %verify(not md5 size mtime) %attr(660,root,quagga) %{_sysconfdir}/*.conf
 %config(noreplace) %verify(not md5 size mtime) /etc/pam.d/zebra
-%dir %attr(750,root,root) /var/run/zebra
-%dir %attr(750,root,root) /var/log/zebra
-%dir %attr(750,root,root) /var/log/archiv/zebra
+%dir %attr(770,root,quagga) /var/run/%{name}
+%dir %attr(750,root,root) /var/log/%{name}
+%dir %attr(750,root,root) /var/log/archiv/%{name}
 
 %doc zebra/*sample*
 %{_mandir}/man8/zebra*
@@ -339,7 +379,7 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/zebra
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/sysconfig/zebra
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/logrotate.d/zebra
-%ghost /var/log/zebra/zebra*
+%ghost /var/log/%{name}/zebra*
 
 %files bgpd
 %defattr(644,root,root,755)
@@ -349,7 +389,7 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/bgpd
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/sysconfig/bgpd
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/logrotate.d/bgpd
-%ghost /var/log/zebra/bgpd*
+%ghost /var/log/%{name}/bgpd*
 
 %files ospfd
 %defattr(644,root,root,755)
@@ -360,7 +400,7 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/ospfd
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/sysconfig/ospfd
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/logrotate.d/ospfd
-%ghost /var/log/zebra/ospfd*
+%ghost /var/log/%{name}/ospfd*
 
 %files ospf6d
 %defattr(644,root,root,755)
@@ -370,7 +410,7 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/ospf6d
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/sysconfig/ospf6d
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/logrotate.d/ospf6d
-%ghost /var/log/zebra/ospf6d*
+%ghost /var/log/%{name}/ospf6d*
 
 %files ripd
 %defattr(644,root,root,755)
@@ -380,7 +420,7 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/ripd
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/sysconfig/ripd
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/logrotate.d/ripd
-%ghost /var/log/zebra/ripd*
+%ghost /var/log/%{name}/ripd*
 
 %files ripngd
 %defattr(644,root,root,755)
@@ -390,7 +430,7 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/ripngd
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/sysconfig/ripngd
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/logrotate.d/ripngd
-%ghost /var/log/zebra/ripngd*
+%ghost /var/log/%{name}/ripngd*
 
 %files devel
 %defattr(644,root,root,755)
