@@ -1,0 +1,48 @@
+--- quagga-0.96.4/configure.ac.orig	Sun Nov  2 05:12:19 2003
++++ quagga-0.96.4/configure.ac	Mon Dec  1 13:33:26 2003
+@@ -472,40 +472,16 @@
+ dnl -----------------------
+ dnl check proc file system.
+ dnl -----------------------
+-if test -r /proc/net/dev; then
+-  AC_DEFINE(HAVE_PROC_NET_DEV,,/proc/net/dev)
+-  IF_PROC=if_proc.o
+-fi
+-
+-if test -r /proc/net/if_inet6; then
+-  AC_DEFINE(HAVE_PROC_NET_IF_INET6,,/proc/net/if_inet6)
+-  IF_PROC=if_proc.o
+-fi
++AC_DEFINE(HAVE_PROC_NET_DEV,,/proc/net/dev)
++IF_PROC=if_proc.o
++AC_DEFINE(HAVE_PROC_NET_IF_INET6,,/proc/net/if_inet6)
+ AC_SUBST(IF_PROC)
+ 
+ dnl -----------------------------
+ dnl check ipforward detect method
+ dnl -----------------------------
+-AC_CACHE_CHECK(ipforward method check, zebra_ipforward_path,
+-[for zebra_ipforward_path in /proc/net/snmp /dev/ip /dev/null;
+-do
+-  test x`ls $zebra_ipforward_path 2>/dev/null` = x"$zebra_ipforward_path" && break
+-done
+-case $zebra_ipforward_path in
+-  "/proc/net/snmp")  IPFORWARD=ipforward_proc.o
+-                     zebra_ipforward_path="proc";;
+-  "/dev/ip")         
+-                     case "$host" in
+-                       *-nec-sysv4*)  IPFORWARD=ipforward_ews.o
+-                                      zebra_ipforward_path="ews";;
+-                       *-freebsd*)    IPFORWARD=ipforward_sysctl.o
+-                                      zebra_ipforward_path="sysctl";;
+-                       *)             IPFORWARD=ipforward_solaris.o
+-                                      zebra_ipforward_path="solaris";;
+-                     esac;;
+-  *)                 IPFORWARD=ipforward_sysctl.o
+-                     zebra_ipforward_path="sysctl";;
+-esac])
++IPFORWARD=ipforward_proc.o
++zebra_ipforward_path="proc"
+ AC_SUBST(IPFORWARD)
+ 
+ AC_CHECK_FUNCS(getaddrinfo, [have_getaddrinfo=yes], [have_getaddrinfo=no])
