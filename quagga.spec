@@ -47,7 +47,8 @@ Obsoletes:	gated
 Obsoletes:	mrt
 Obsoletes:	zebra-xs26
 
-%define		_sysconfdir /etc/%{name}
+%define		_sysconfdir	/etc/%{name}
+%define		_includedir	%{_prefix}/include/%{name}
 
 %description
 Quagga is a routing software suite, providing implementations of
@@ -133,6 +134,17 @@ RIP routing daemon for IPv6 networks.
 
 %description ripngd -l pl
 Demon obs³ugi protoko³u RIP w sieciach IPv6.
+
+%package devel
+Summary:        Header files and develpment documentation for quagga
+Summary(pl):    Pliki nag³ówkowe i dokumetacja do quagga
+Group:          Development/Libraries
+
+%description devel
+Header files and develpment documentation for quagga.
+
+%description devel -l pl
+Pliki nag³ówkowe i dokumetacja do quagga.
 
 %prep
 %setup -q
@@ -344,6 +356,7 @@ fi
 %doc ospfd/*sample*
 %{_mandir}/man8/ospfd*
 %attr(755,root,root) %{_sbindir}/ospfd
+%attr(755,root,root) %{_sbindir}/ospfclient
 %attr(754,root,root) /etc/rc.d/init.d/ospfd
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/sysconfig/ospfd
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/logrotate.d/ospfd
@@ -378,3 +391,8 @@ fi
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/sysconfig/ripngd
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/logrotate.d/ripngd
 %ghost /var/log/zebra/ripngd*
+
+%files devel
+%defattr(644,root,root,755)
+%{_includedir}
+%{_libdir}/*.a
