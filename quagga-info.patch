@@ -1,0 +1,14 @@
+--- quagga-0.96.4/doc/quagga.texi.orig	Tue Aug 12 14:40:20 2003
++++ quagga-0.96.4/doc/quagga.texi	Mon Dec  1 13:34:09 2003
+@@ -18,9 +18,9 @@
+ @set INSTALL_PREFIX_SBIN /usr/local/sbin
+ 
+ @c Info entry
+-@dircategory Routing Software:
++@dircategory Network utilities:
+ @direntry
+-* Quagga: (quagga).		The Quagga routing software
++* Quagga: (quagga).			The Quagga routing software
+ @end direntry
+ 
+ @c @smallbook
