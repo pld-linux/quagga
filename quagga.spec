@@ -37,7 +37,6 @@ BuildRequires:	net-snmp-devel
 BuildRequires:	pam-devel
 BuildRequires:	perl-base
 BuildRequires:	readline-devel >= 4.1
-BuildRequires:	rpmbuild(macros) >= 1.159
 BuildRequires:	texinfo
 PreReq:		rc-scripts
 Requires(pre):	/bin/id
@@ -258,6 +257,7 @@ fi
 
 %post
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
+ldconfig
 /sbin/chkconfig --add zebra >&2
 umask 027
 if [ ! -s %{_sysconfdir}/zebra.conf ]; then
@@ -377,6 +377,7 @@ fi
 %dir %attr(770,root,quagga) /var/run/%{name}
 %dir %attr(750,root,root) /var/log/%{name}
 %dir %attr(750,root,root) /var/log/archiv/%{name}
+%attr(755,root,root) %{_libdir}/*.so.*
 
 %doc zebra/*sample*
 %{_mandir}/man8/zebra*
@@ -441,3 +442,4 @@ fi
 %defattr(644,root,root,755)
 %{_includedir}
 %{_libdir}/*.a
+%{_libdir}/*.la
