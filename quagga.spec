@@ -2,7 +2,7 @@ Summary:	Routing Software Suite
 Summary(pl):	Zestaw oprogramowania do routingu
 Name:		quagga
 Version:	0.96.5
-Release:	1
+Release:	2
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://www.quagga.net/download/%{name}-%{version}.tar.gz
@@ -366,7 +366,7 @@ fi
 %{_infodir}/*info*
 %{_mandir}/man1/*
 %attr(755,root,root) %{_bindir}/*
-%dir %attr(750,root,quagga) %{_sysconfdir}
+%dir %attr(770,root,quagga) %{_sysconfdir}
 %config(noreplace) %verify(not md5 size mtime) %attr(660,root,quagga) %{_sysconfdir}/*.conf
 %config(noreplace) %verify(not md5 size mtime) /etc/pam.d/zebra
 %dir %attr(770,root,quagga) /var/run/%{name}
