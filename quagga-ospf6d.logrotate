@@ -1,6 +1,6 @@
 /var/log/quagga/ospf6d.log {
 	missingok
-	olddir /var/log/archiv/zebra
+	olddir /var/log/archiv/quagga
 	postrotate
 		/bin/killall -USR1 ospf6d >/dev/null 2>&1
 	endscript

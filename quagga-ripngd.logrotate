@@ -1,6 +1,6 @@
 /var/log/quagga/ripngd.log {
 	missingok
-	olddir /var/log/archiv/zebra
+	olddir /var/log/archiv/quagga
 	postrotate
 		/bin/killall -USR1 ripngd >/dev/null 2>&1
 	endscript
