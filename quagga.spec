@@ -2,7 +2,7 @@ Summary:	Routing Software Suite
 Summary(pl):	Zestaw oprogramowania do routingu
 Name:		quagga
 Version:	0.96.5
-Release:	2
+Release:	3
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://www.quagga.net/download/%{name}-%{version}.tar.gz
@@ -43,7 +43,7 @@ Requires(post,preun):	/sbin/chkconfig
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
-Requires(pre):  /usr/sbin/useradd
+Requires(pre):	/usr/sbin/useradd
 Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
 Requires(post):	/bin/hostname
@@ -144,9 +144,9 @@ RIP routing daemon for IPv6 networks.
 Demon obs³ugi protoko³u RIP w sieciach IPv6.
 
 %package devel
-Summary:        Header files and develpment documentation for quagga
-Summary(pl):    Pliki nag³ówkowe i dokumetacja do quagga
-Group:          Development/Libraries
+Summary:	Header files and develpment documentation for quagga
+Summary(pl):	Pliki nag³ówkowe i dokumetacja do quagga
+Group:		Development/Libraries
 
 %description devel
 Header files and develpment documentation for quagga.
@@ -226,29 +226,29 @@ rm -rf $RPM_BUILD_ROOT
 
 %pre
 if [ -n "`getgid quagga`" ]; then
-        if [ "`getgid quagga`" != "127" ]; then
-                echo "Error: group quagga doesn't have gid=127. Correct this before installing quagga." 1>&2
-                exit 1
-        fi
+	if [ "`getgid quagga`" != "127" ]; then
+		echo "Error: group quagga doesn't have gid=127. Correct this before installing quagga." 1>&2
+		exit 1
+	fi
 else
-        /usr/sbin/groupadd -g 127 -r -f quagga
+	/usr/sbin/groupadd -g 127 -r -f quagga
 fi
 if [ -n "`getgid quaggavty`" ]; then
-        if [ "`getgid quaggavty`" != "128" ]; then
-                echo "Error: group quaggavty doesn't have gid=128. Correct this before installing quagga." 1>&2
-                exit 1
-        fi
+	if [ "`getgid quaggavty`" != "128" ]; then
+		echo "Error: group quaggavty doesn't have gid=128. Correct this before installing quagga." 1>&2
+		exit 1
+	fi
 else
-        /usr/sbin/groupadd -g 128 -r -f quaggavty
+	/usr/sbin/groupadd -g 128 -r -f quaggavty
 fi
 
 if [ -n "`id -u quagga 2>/dev/null`" ]; then
-        if [ "`id -u quagga`" != "51" ]; then
-                echo "Error: user quagga doesn't have uid=127. Correct this before installing quagga." 1>&2
-                exit 1
-        fi
+	if [ "`id -u quagga`" != "127" ]; then
+		echo "Error: user quagga doesn't have uid=127. Correct this before installing quagga." 1>&2
+		exit 1
+	fi
 else
-        /usr/sbin/useradd -u 127 -r -d /tmp -s /bin/false -c "Quagga User" -g quagga quagga 1>&2
+	/usr/sbin/useradd -u 127 -r -d /tmp -s /bin/false -c "Quagga User" -g quagga quagga 1>&2
 fi
 
 %post
@@ -256,7 +256,7 @@ fi
 /sbin/chkconfig --add zebra >&2
 umask 027
 if [ ! -s %{_sysconfdir}/zebra.conf ]; then
-        echo "hostname `hostname`" > %{_sysconfdir}/zebra.conf
+	echo "hostname `hostname`" > %{_sysconfdir}/zebra.conf
 fi
 if [ -f /var/lock/subsys/zebra ]; then
 	/etc/rc.d/init.d/zebra restart >&2
@@ -309,7 +309,7 @@ if [ "$1" = "0" ]; then
 	if [ -f /var/lock/subsys/zebra ]; then
 		/etc/rc.d/init.d/zebra stop >&2
 	fi
-        /sbin/chkconfig --del zebra >&2
+	/sbin/chkconfig --del zebra >&2
 fi
 
 %preun bgpd
@@ -317,7 +317,7 @@ if [ "$1" = "0" ]; then
 	if [ -f /var/lock/subsys/bgpd ]; then
 		/etc/rc.d/init.d/bgpd stop >&2
 	fi
-        /sbin/chkconfig --del bgpd >&2
+	/sbin/chkconfig --del bgpd >&2
 fi
 
 %preun ospfd
@@ -325,7 +325,7 @@ if [ "$1" = "0" ]; then
 	if [ -f /var/lock/subsys/ospfd ]; then
 		/etc/rc.d/init.d/ospfd stop >&2
 	fi
-        /sbin/chkconfig --del ospfd >&2
+	/sbin/chkconfig --del ospfd >&2
 fi
 
 %preun ospf6d
@@ -333,7 +333,7 @@ if [ "$1" = "0" ]; then
 	if [ -f /var/lock/subsys/ospf6d ]; then
 		/etc/rc.d/init.d/ospf6d stop >&2
 	fi
-        /sbin/chkconfig --del ospf6d >&2
+	/sbin/chkconfig --del ospf6d >&2
 fi
 
 %preun ripd
@@ -341,7 +341,7 @@ if [ "$1" = "0" ]; then
 	if [ -f /var/lock/subsys/ripd ]; then
 		/etc/rc.d/init.d/ripd stop >&2
 	fi
-        /sbin/chkconfig --del ripd >&2
+	/sbin/chkconfig --del ripd >&2
 fi
 
 %preun ripngd
@@ -349,14 +349,14 @@ if [ "$1" = "0" ]; then
 	if [ -f /var/lock/subsys/ripngd ]; then
 		/etc/rc.d/init.d/ripngd stop >&2
 	fi
-        /sbin/chkconfig --del ripngd >&2
+	/sbin/chkconfig --del ripngd >&2
 fi
 
 %postun
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
 if [ "$1" = "0" ]; then
-        /usr/sbin/userdel quagga
-        /usr/sbin/groupdel quagga
+	/usr/sbin/userdel quagga
+	/usr/sbin/groupdel quagga
 	/usr/sbin/groupdel quaggavty
 fi
 
