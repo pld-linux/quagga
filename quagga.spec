@@ -35,6 +35,7 @@ Patch4:		%{name}-ospfclient.patch
 URL:		http://www.quagga.net/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
+BuildRequires:	libtool
 BuildRequires:	ncurses-devel >= 5.1
 BuildRequires:	net-snmp-devel
 BuildRequires:	pam-devel
