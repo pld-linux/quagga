@@ -26,18 +26,17 @@ Source32:	%{name}-ospfd.logrotate
 Source33:	%{name}-ospf6d.logrotate
 Source34:	%{name}-ripngd.logrotate
 Source35:	%{name}-ripd.logrotate
-#Patch1:		%{name}-proc.patch
-#Patch2:		%{name}-socket_paths.patch
-#Patch3:		%{name}-autoconf.patch
-#Patch4:		%{name}-nolog.patch
+Patch0:		%{name}-info.patch
+Patch1:		%{name}-proc.patch
+Patch2:		%{name}-netlink.patch
 URL:		http://www.quagga.org/
-BuildRequires:	texinfo
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
-BuildRequires:	readline-devel >= 4.1
 BuildRequires:	ncurses-devel >= 5.1
-BuildRequires:	pam-devel
 BuildRequires:	net-snmp-devel
+BuildRequires:	pam-devel
+BuildRequires:	readline-devel >= 4.1
+BuildRequires:	texinfo
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
 Requires(post):	/bin/hostname
@@ -136,20 +135,18 @@ RIP routing daemon for IPv6 networks.
 Demon obs³ugi protoko³u RIP w sieciach IPv6.
 
 %prep
-%setup  -q
-#%patch1 -p1
-#%patch2 -p1
-#%patch3 -p1
-#%patch4 -p1
+%setup -q
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
 
 %build
-rm -f ./missing
-rm -f doc/quagga.info*
 %{__aclocal}
 %{__autoconf}
 %{__automake}
 %{__autoheader}
 %configure \
+	--enable-ipv6 \
 	--enable-vtysh \
 	--enable-netlink \
 	--enable-snmp \
