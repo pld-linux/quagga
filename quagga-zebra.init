@@ -41,7 +41,7 @@ case "$1" in
 		RETVAL=$?
 		if [ $RETVAL -eq 0 ] ; then
 			touch /var/lock/subsys/zebra
-			if [ -f /etc/zebra/Zebra.conf ] ; then
+			if [ -f /etc/zebra/Quagga.conf ] ; then
 				run_cmd "Loading zebra configuration" vtysh -b
 			fi
 		fi
