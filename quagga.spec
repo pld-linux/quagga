@@ -56,6 +56,7 @@ Obsoletes:	bird
 Obsoletes:	gated
 Obsoletes:	mrt
 Obsoletes:	zebra-xs26
+Obsoletes:	quagga
 
 %define		_sysconfdir	/etc/%{name}
 %define		_includedir	%{_prefix}/include/%{name}
