@@ -37,6 +37,7 @@ BuildRequires:	net-snmp-devel
 BuildRequires:	pam-devel
 BuildRequires:	perl-base
 BuildRequires:	readline-devel >= 4.1
+BuildRequires:	rpmbuild(macros) >= 1.159
 BuildRequires:	texinfo
 PreReq:		rc-scripts
 Requires(pre):	/bin/id
@@ -44,6 +45,7 @@ Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires(post):	/bin/hostname
+Requires(post):	/sbin/ldconfig
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
@@ -51,12 +53,12 @@ Provides:	group(quagga)
 Provides:	group(quaggavty)
 Provides:	routingdaemon
 Provides:	user(quagga)
-BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	bird
 Obsoletes:	gated
 Obsoletes:	mrt
 Obsoletes:	zebra-xs26
 Obsoletes:	quagga
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/%{name}
 %define		_includedir	%{_prefix}/include/%{name}
@@ -148,15 +150,28 @@ RIP routing daemon for IPv6 networks.
 Demon obs³ugi protoko³u RIP w sieciach IPv6.
 
 %package devel
-Summary:	Header files and develpment documentation for quagga
-Summary(pl):	Pliki nag³ówkowe i dokumetacja do quagga
+Summary:	Header files for quagga libraries
+Summary(pl):	Pliki nag³ówkowe bibliotek quagga
 Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release}
 
 %description devel
-Header files and develpment documentation for quagga.
+Header files for quagga libraries.
 
 %description devel -l pl
-Pliki nag³ówkowe i dokumetacja do quagga.
+Pliki nag³ówkowe bibliotek quagga.
+
+%package static
+Summary:	Static version of quagga libraries
+Summary(pl):	Statyczne wersje bibliotek quagga
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+
+%description static
+Static version of quagga libraries.
+
+%description static -l pl
+Statyczne wersje bibliotek quagga.
 
 %prep
 %setup -q
@@ -258,7 +273,7 @@ fi
 
 %post
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
-ldconfig
+/sbin/ldconfig
 /sbin/chkconfig --add zebra >&2
 umask 027
 if [ ! -s %{_sysconfdir}/zebra.conf ]; then
@@ -378,7 +393,7 @@ fi
 %dir %attr(770,root,quagga) /var/run/%{name}
 %dir %attr(750,root,root) /var/log/%{name}
 %dir %attr(750,root,root) /var/log/archiv/%{name}
-%attr(755,root,root) %{_libdir}/*.so.*
+%attr(755,root,root) %{_libdir}/lib*.so.*.*.*
 
 %doc zebra/*sample*
 %{_mandir}/man8/zebra*
@@ -441,6 +456,10 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/lib*.so
+%{_libdir}/lib*.la
 %{_includedir}
+
+%files static
+%defattr(644,root,root,755)
 %{_libdir}/*.a
-%{_libdir}/*.la
