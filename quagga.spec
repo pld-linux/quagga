@@ -35,19 +35,23 @@ BuildRequires:	automake
 BuildRequires:	ncurses-devel >= 5.1
 BuildRequires:	net-snmp-devel
 BuildRequires:	pam-devel
-BuildRequires:	readline-devel >= 4.1
-BuildRequires:	texinfo
 BuildRequires:	perl-base
+BuildRequires:	readline-devel >= 4.1
+BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	texinfo
 PreReq:		rc-scripts
-Requires(post,preun):	/sbin/chkconfig
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires(postun):	/usr/sbin/userdel
-Requires(postun):	/usr/sbin/groupdel
 Requires(post):	/bin/hostname
+Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
+Provides:	group(quagga)
+Provides:	group(quaggavty)
 Provides:	routingdaemon
+Provides:	user(quagga)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	bird
 Obsoletes:	gated
@@ -225,30 +229,31 @@ touch $RPM_BUILD_ROOT%{_sysconfdir}/{vtysh.conf,zebra.conf}
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -n "`getgid quagga`" ]; then
-	if [ "`getgid quagga`" != "127" ]; then
+if [ -n "`/usr/bin/getgid quagga`" ]; then
+	if [ "`/usr/bin/getgid quagga`" != "127" ]; then
 		echo "Error: group quagga doesn't have gid=127. Correct this before installing quagga." 1>&2
 		exit 1
 	fi
 else
-	/usr/sbin/groupadd -g 127 -r -f quagga
+	/usr/sbin/groupadd -g 127 quagga 1>&2
 fi
-if [ -n "`getgid quaggavty`" ]; then
-	if [ "`getgid quaggavty`" != "128" ]; then
+if [ -n "`/usr/bin/getgid quaggavty`" ]; then
+	if [ "`/usr/bin/getgid quaggavty`" != "128" ]; then
 		echo "Error: group quaggavty doesn't have gid=128. Correct this before installing quagga." 1>&2
 		exit 1
 	fi
 else
-	/usr/sbin/groupadd -g 128 -r -f quaggavty
+	/usr/sbin/groupadd -g 128 quaggavty 1>&2
 fi
 
-if [ -n "`id -u quagga 2>/dev/null`" ]; then
-	if [ "`id -u quagga`" != "127" ]; then
+if [ -n "`/bin/id -u quagga 2>/dev/null`" ]; then
+	if [ "`/bin/id -u quagga`" != "127" ]; then
 		echo "Error: user quagga doesn't have uid=127. Correct this before installing quagga." 1>&2
 		exit 1
 	fi
 else
-	/usr/sbin/useradd -u 127 -r -d /tmp -s /bin/false -c "Quagga User" -g quagga quagga 1>&2
+	/usr/sbin/useradd -u 127 -d /tmp -s /bin/false -c "Quagga User" \
+		-g quagga quagga 1>&2
 fi
 
 %post
@@ -355,9 +360,9 @@ fi
 %postun
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
 if [ "$1" = "0" ]; then
-	/usr/sbin/userdel quagga
-	/usr/sbin/groupdel quagga
-	/usr/sbin/groupdel quaggavty
+	%userremove quagga
+	%groupremove quagga
+	%groupremove quaggavty
 fi
 
 %files
