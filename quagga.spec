@@ -1,4 +1,5 @@
 Summary:	Routing Software Suite
+Summary(pl):	Zestaw oprogramowania do routingu
 Name:		quagga
 Version:	0.96.4
 Release:	1
@@ -50,7 +51,21 @@ Obsoletes:	zebra-xs26
 %define		_sysconfdir /etc/%{name}
 
 %description
-Quagga is a routing software suite, providing implementations of OSPFv2, OSPFv3, RIP v1 and v2, RIPv3 and BGPv4 for Unix platforms, particularly FreeBSD and Linux and also NetBSD, to mention a few. Quagga is a fork of GNU Zebra which was developed by Kunihiro Ishiguro. The Quagga tree aims to build a more involved community around Quagga than the current centralised model of GNU Zebra.
+Quagga is a routing software suite, providing implementations of
+OSPFv2, OSPFv3, RIP v1 and v2, RIPv3 and BGPv4 for Unix platforms,
+particularly FreeBSD and Linux and also NetBSD, to mention a few.
+Quagga is a fork of GNU Zebra which was developed by Kunihiro
+Ishiguro. The Quagga tree aims to build a more involved community
+around Quagga than the current centralised model of GNU Zebra.
+
+%description -l pl
+Quagga to zestaw oprogramowania do routingu, dostarczaj±cy
+implementacje OSPFv2, OSPFv3, RIP v1 i v2, RIPv3 i BGPv4 dla platform
+uniksowych, w szczególno¶ci FreeBSD, Linuksa, NetBSD - ¿eby wymieniæ
+tylko kilka. Quagga to odga³êzienie projektu GNU Zebra, który by³
+rozwijany przez Kunihiro Ishiguro. Celem drzewa Quagga jest
+zgromadzenie bardziej zaanga¿owanej spo³eczno¶ci wokó³ projektu, ni¿ w
+aktualnie scentralizowanym modelu GNU Zebry.
 
 %package bgpd
 Summary:	BGP routing daemon
