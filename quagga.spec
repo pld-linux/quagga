@@ -41,7 +41,7 @@ BuildRequires:	net-snmp-devel
 BuildRequires:	pam-devel
 BuildRequires:	perl-base
 BuildRequires:	readline-devel >= 4.1
-BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	rpmbuild(macros) >= 1.202
 BuildRequires:	texinfo
 PreReq:		rc-scripts
 Requires(pre):	/bin/id
@@ -250,32 +250,9 @@ touch $RPM_BUILD_ROOT%{_sysconfdir}/{vtysh.conf,zebra.conf}
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -n "`/usr/bin/getgid quagga`" ]; then
-	if [ "`/usr/bin/getgid quagga`" != "127" ]; then
-		echo "Error: group quagga doesn't have gid=127. Correct this before installing quagga." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/groupadd -g 127 quagga 1>&2
-fi
-if [ -n "`/usr/bin/getgid quaggavty`" ]; then
-	if [ "`/usr/bin/getgid quaggavty`" != "128" ]; then
-		echo "Error: group quaggavty doesn't have gid=128. Correct this before installing quagga." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/groupadd -g 128 quaggavty 1>&2
-fi
-
-if [ -n "`/bin/id -u quagga 2>/dev/null`" ]; then
-	if [ "`/bin/id -u quagga`" != "127" ]; then
-		echo "Error: user quagga doesn't have uid=127. Correct this before installing quagga." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/useradd -u 127 -d /tmp -s /bin/false -c "Quagga User" \
-		-g quagga quagga 1>&2
-fi
+%groupadd -g 127 quagga
+%groupadd -g 128 quaggavty
+%useradd -u 127 -d /tmp -s /bin/false -c "Quagga User" -g quagga quagga
 
 %post
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
