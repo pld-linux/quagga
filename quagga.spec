@@ -3,7 +3,7 @@ Summary:	Routing Software Suite
 Summary(pl):	Zestaw oprogramowania do routingu
 Name:		quagga
 Version:	0.98.3
-Release:	1
+Release:	2
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://www.quagga.net/download/%{name}-%{version}.tar.gz
@@ -32,6 +32,7 @@ Patch1:		%{name}-proc.patch
 Patch2:		%{name}-netlink.patch
 Patch3:		%{name}-ospf_lsdb.patch
 Patch4:		%{name}-ospfclient.patch
+Patch5:		%{name}-vtysh-pam.patch
 URL:		http://www.quagga.net/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
@@ -184,6 +185,7 @@ Statyczne wersje bibliotek quagga.
 %patch2 -p1
 %patch3 -p0
 %patch4 -p0
+%patch5 -p1
 
 %build
 %{__aclocal}
@@ -205,6 +207,7 @@ Statyczne wersje bibliotek quagga.
 	--enable-group=quagga \
 	--enable-vty-group=quaggavty \
 	--enable-rtadv \
+        --disable-watchquagga \
 	--with-libpam
 
 %{__make}
@@ -244,7 +247,7 @@ install %{SOURCE35} $RPM_BUILD_ROOT/etc/logrotate.d/ripngd
 
 touch $RPM_BUILD_ROOT/var/log/%{name}/{zebra,bgpd,ospf6d,ospfd,ripd,ripngd}.log
 
-touch $RPM_BUILD_ROOT%{_sysconfdir}/{vtysh.conf,zebra.conf}
+touch $RPM_BUILD_ROOT%{_sysconfdir}/{vtysh,zebra,bgpd,ospf6d,ospfd,ripd,ripngd}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -270,6 +273,9 @@ fi
 
 %post bgpd
 /sbin/chkconfig --add bgpd >&2
+if [ ! -s %{_sysconfdir}/bgpd.conf ]; then
+	echo "hostname `hostname`" > %{_sysconfdir}/bgpd.conf
+fi
 if [ -f /var/lock/subsys/bgpd ]; then
 	/etc/rc.d/init.d/bgpd restart >&2
 else
@@ -278,6 +284,9 @@ fi
 
 %post ospfd
 /sbin/chkconfig --add ospfd >&2
+if [ ! -s %{_sysconfdir}/ospfd.conf ]; then
+	echo "hostname `hostname`" > %{_sysconfdir}/ospfd.conf
+fi
 if [ -f /var/lock/subsys/ospfd ]; then
 	/etc/rc.d/init.d/ospfd restart >&2
 else
@@ -286,6 +295,9 @@ fi
 
 %post ospf6d
 /sbin/chkconfig --add ospf6d >&2
+if [ ! -s %{_sysconfdir}/ospf6d.conf ]; then
+	echo "hostname `hostname`" > %{_sysconfdir}/ospf6d.conf
+fi
 if [ -f /var/lock/subsys/ospf6d ]; then
 	/etc/rc.d/init.d/ospf6d restart >&2
 else
@@ -294,6 +306,9 @@ fi
 
 %post ripd
 /sbin/chkconfig --add ripd >&2
+if [ ! -s %{_sysconfdir}/ripd.conf ]; then
+	echo "hostname `hostname`" > %{_sysconfdir}/ripd.conf
+fi
 if [ -f /var/lock/subsys/ripd ]; then
 	/etc/rc.d/init.d/ripd restart >&2
 else
@@ -302,6 +317,9 @@ fi
 
 %post ripngd
 /sbin/chkconfig --add ripngd >&2
+if [ ! -s %{_sysconfdir}/ripngd.conf ]; then
+	echo "hostname `hostname`" > %{_sysconfdir}/ripngd.conf
+fi
 if [ -f /var/lock/subsys/ripngd ]; then
 	/etc/rc.d/init.d/ripngd restart >&2
 else
@@ -371,13 +389,13 @@ fi
 %{_mandir}/man1/*
 %attr(755,root,root) %{_bindir}/*
 %dir %attr(770,root,quagga) %{_sysconfdir}
-%config(noreplace) %verify(not md5 size mtime) %attr(660,root,quagga) %{_sysconfdir}/*.conf
+%config(noreplace) %verify(not md5 size mtime) %attr(660,root,quagga) %{_sysconfdir}/vtysh.conf
+%config(noreplace) %verify(not md5 size mtime) %attr(660,root,quagga) %{_sysconfdir}/zebra.conf
 %config(noreplace) %verify(not md5 size mtime) /etc/pam.d/zebra
 %dir %attr(770,root,quagga) /var/run/%{name}
 %dir %attr(750,root,root) /var/log/%{name}
 %dir %attr(750,root,root) /var/log/archiv/%{name}
 %attr(755,root,root) %{_libdir}/lib*.so.*.*.*
-
 %doc zebra/*sample*
 %{_mandir}/man8/zebra*
 %attr(755,root,root) %{_sbindir}/zebra
@@ -392,6 +410,7 @@ fi
 %{_mandir}/man8/bgpd*
 %attr(755,root,root) %{_sbindir}/bgpd
 %attr(754,root,root) /etc/rc.d/init.d/bgpd
+%config(noreplace) %verify(not md5 size mtime) %attr(660,root,quagga) %{_sysconfdir}/bgpd.conf
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/sysconfig/bgpd
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/logrotate.d/bgpd
 %ghost /var/log/%{name}/bgpd*
@@ -403,6 +422,7 @@ fi
 %attr(755,root,root) %{_sbindir}/ospfd
 %attr(755,root,root) %{_sbindir}/ospfclient
 %attr(754,root,root) /etc/rc.d/init.d/ospfd
+%config(noreplace) %verify(not md5 size mtime) %attr(660,root,quagga) %{_sysconfdir}/ospfd.conf
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/sysconfig/ospfd
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/logrotate.d/ospfd
 %ghost /var/log/%{name}/ospfd*
@@ -413,6 +433,7 @@ fi
 %{_mandir}/man8/ospf6d*
 %attr(755,root,root) %{_sbindir}/ospf6d
 %attr(754,root,root) /etc/rc.d/init.d/ospf6d
+%config(noreplace) %verify(not md5 size mtime) %attr(660,root,quagga) %{_sysconfdir}/ospf6d.conf
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/sysconfig/ospf6d
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/logrotate.d/ospf6d
 %ghost /var/log/%{name}/ospf6d*
@@ -423,6 +444,7 @@ fi
 %{_mandir}/man8/ripd*
 %attr(755,root,root) %{_sbindir}/ripd
 %attr(754,root,root) /etc/rc.d/init.d/ripd
+%config(noreplace) %verify(not md5 size mtime) %attr(660,root,quagga) %{_sysconfdir}/ripd.conf
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/sysconfig/ripd
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/logrotate.d/ripd
 %ghost /var/log/%{name}/ripd*
@@ -433,6 +455,7 @@ fi
 %{_mandir}/man8/ripngd*
 %attr(755,root,root) %{_sbindir}/ripngd
 %attr(754,root,root) /etc/rc.d/init.d/ripngd
+%config(noreplace) %verify(not md5 size mtime) %attr(660,root,quagga) %{_sysconfdir}/ripngd.conf
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/sysconfig/ripngd
 %config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/logrotate.d/ripngd
 %ghost /var/log/%{name}/ripngd*
