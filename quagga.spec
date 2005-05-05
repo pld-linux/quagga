@@ -389,9 +389,9 @@ fi
 %{_mandir}/man1/*
 %attr(755,root,root) %{_bindir}/*
 %dir %attr(770,root,quagga) %{_sysconfdir}
-%config(noreplace) %verify(not md5 size mtime) %attr(660,root,quagga) %{_sysconfdir}/vtysh.conf
-%config(noreplace) %verify(not md5 size mtime) %attr(660,root,quagga) %{_sysconfdir}/zebra.conf
-%config(noreplace) %verify(not md5 size mtime) /etc/pam.d/zebra
+%config(noreplace) %verify(not md5 mtime size) %attr(660,root,quagga) %{_sysconfdir}/vtysh.conf
+%config(noreplace) %verify(not md5 mtime size) %attr(660,root,quagga) %{_sysconfdir}/zebra.conf
+%config(noreplace) %verify(not md5 mtime size) /etc/pam.d/zebra
 %dir %attr(770,root,quagga) /var/run/%{name}
 %dir %attr(750,root,root) /var/log/%{name}
 %dir %attr(750,root,root) /var/log/archiv/%{name}
@@ -400,8 +400,8 @@ fi
 %{_mandir}/man8/zebra*
 %attr(755,root,root) %{_sbindir}/zebra
 %attr(754,root,root) /etc/rc.d/init.d/zebra
-%config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/sysconfig/zebra
-%config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/logrotate.d/zebra
+%config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/sysconfig/zebra
+%config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/logrotate.d/zebra
 %ghost /var/log/%{name}/zebra*
 
 %files bgpd
@@ -410,9 +410,9 @@ fi
 %{_mandir}/man8/bgpd*
 %attr(755,root,root) %{_sbindir}/bgpd
 %attr(754,root,root) /etc/rc.d/init.d/bgpd
-%config(noreplace) %verify(not md5 size mtime) %attr(660,root,quagga) %{_sysconfdir}/bgpd.conf
-%config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/sysconfig/bgpd
-%config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/logrotate.d/bgpd
+%config(noreplace) %verify(not md5 mtime size) %attr(660,root,quagga) %{_sysconfdir}/bgpd.conf
+%config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/sysconfig/bgpd
+%config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/logrotate.d/bgpd
 %ghost /var/log/%{name}/bgpd*
 
 %files ospfd
@@ -422,9 +422,9 @@ fi
 %attr(755,root,root) %{_sbindir}/ospfd
 %attr(755,root,root) %{_sbindir}/ospfclient
 %attr(754,root,root) /etc/rc.d/init.d/ospfd
-%config(noreplace) %verify(not md5 size mtime) %attr(660,root,quagga) %{_sysconfdir}/ospfd.conf
-%config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/sysconfig/ospfd
-%config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/logrotate.d/ospfd
+%config(noreplace) %verify(not md5 mtime size) %attr(660,root,quagga) %{_sysconfdir}/ospfd.conf
+%config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/sysconfig/ospfd
+%config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/logrotate.d/ospfd
 %ghost /var/log/%{name}/ospfd*
 
 %files ospf6d
@@ -433,9 +433,9 @@ fi
 %{_mandir}/man8/ospf6d*
 %attr(755,root,root) %{_sbindir}/ospf6d
 %attr(754,root,root) /etc/rc.d/init.d/ospf6d
-%config(noreplace) %verify(not md5 size mtime) %attr(660,root,quagga) %{_sysconfdir}/ospf6d.conf
-%config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/sysconfig/ospf6d
-%config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/logrotate.d/ospf6d
+%config(noreplace) %verify(not md5 mtime size) %attr(660,root,quagga) %{_sysconfdir}/ospf6d.conf
+%config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/sysconfig/ospf6d
+%config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/logrotate.d/ospf6d
 %ghost /var/log/%{name}/ospf6d*
 
 %files ripd
@@ -444,9 +444,9 @@ fi
 %{_mandir}/man8/ripd*
 %attr(755,root,root) %{_sbindir}/ripd
 %attr(754,root,root) /etc/rc.d/init.d/ripd
-%config(noreplace) %verify(not md5 size mtime) %attr(660,root,quagga) %{_sysconfdir}/ripd.conf
-%config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/sysconfig/ripd
-%config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/logrotate.d/ripd
+%config(noreplace) %verify(not md5 mtime size) %attr(660,root,quagga) %{_sysconfdir}/ripd.conf
+%config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/sysconfig/ripd
+%config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/logrotate.d/ripd
 %ghost /var/log/%{name}/ripd*
 
 %files ripngd
@@ -455,9 +455,9 @@ fi
 %{_mandir}/man8/ripngd*
 %attr(755,root,root) %{_sbindir}/ripngd
 %attr(754,root,root) /etc/rc.d/init.d/ripngd
-%config(noreplace) %verify(not md5 size mtime) %attr(660,root,quagga) %{_sysconfdir}/ripngd.conf
-%config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/sysconfig/ripngd
-%config(noreplace) %verify(not md5 size mtime) %attr(640,root,root) /etc/logrotate.d/ripngd
+%config(noreplace) %verify(not md5 mtime size) %attr(660,root,quagga) %{_sysconfdir}/ripngd.conf
+%config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/sysconfig/ripngd
+%config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/logrotate.d/ripngd
 %ghost /var/log/%{name}/ripngd*
 
 %files devel
