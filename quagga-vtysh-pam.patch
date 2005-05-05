@@ -1,0 +1,12 @@
+diff -urN a/vtysh/vtysh_user.c b/vtysh/vtysh_user.c
+--- a/vtysh/vtysh_user.c	2004-10-11 15:20:40.000000000 +0200
++++ b/vtysh/vtysh_user.c	2005-05-05 14:46:39.000000000 +0200
+@@ -52,7 +52,7 @@
+   pam_handle_t *pamh = NULL;
+ 
+   /* Start PAM. */
+-  ret = pam_start(QUAGGA_PROGNAME, user, &conv, &pamh);
++  ret = pam_start("zebra", user, &conv, &pamh);
+   /* printf ("ret %d\n", ret); */
+ 
+   /* Is user really user? */
