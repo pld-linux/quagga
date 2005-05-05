@@ -5,3 +5,11 @@ SERVICE_RUN_NICE_LEVEL="+2"
 
 # When program terminates, retain added route by zebra.
 #RETAIN_ROUTES=yes
+
+# The address that the ripd VTY will listen on.
+# Default is all intrefaces.
+#VTY_ADDR=127.0.0.1
+
+# The port that the ripd VTY will listen on.
+# Default is 2602.
+#VTY_PORT=2602

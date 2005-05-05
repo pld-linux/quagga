@@ -36,8 +36,11 @@ case "$1" in
   start)
 	# Check if the services are already running?
 	if [ ! -f /var/lock/subsys/zebra ]; then
+                FLAGS="--daemon"
+                [ -n "$VTY_ADDR" ] && FLAGS="$FLAGS --vty_addr $VTY_ADDR"
+                [ -n "$VTY_PORT" ] && FLAGS="$FLAGS --vty_port $VTY_PORT"
 		msg_starting zebra
-		daemon zebra -d 
+		daemon zebra $FLAGS
 		RETVAL=$?
 		if [ $RETVAL -eq 0 ] ; then
 			touch /var/lock/subsys/zebra

@@ -39,6 +39,8 @@ case "$1" in
 		FLAGS="--daemon"
 		is_yes "$RETAIN_ROUTES" && FLAGS="$FLAGS --retain"
 		is_yes "$NO_KERNEL" && FLAGS="$FLAGS --no_kernel"
+                [ -n "$VTY_ADDR" ] && FLAGS="$FLAGS --vty_addr $VTY_ADDR"
+                [ -n "$VTY_PORT" ] && FLAGS="$FLAGS --vty_port $VTY_PORT"
 		msg_starting bgpd
 		daemon bgpd $FLAGS
 		RETVAL=$?

@@ -37,6 +37,8 @@ case "$1" in
 	# Check if the services are already running?
 	if [ ! -f /var/lock/subsys/ospf6d ]; then
 		FLAGS="--daemon"
+                [ -n "$VTY_ADDR" ] && FLAGS="$FLAGS --vty_addr $VTY_ADDR"
+                [ -n "$VTY_PORT" ] && FLAGS="$FLAGS --vty_port $VTY_PORT"
 		msg_starting ospf6d
 		daemon ospf6d $FLAGS 
 		RETVAL=$?

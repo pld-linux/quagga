@@ -38,6 +38,8 @@ case "$1" in
 	if [ ! -f /var/lock/subsys/ripngd ]; then
 		FLAGS="--daemon"
 		is_yes "$RETAIN_ROUTES" && FLAGS="$FLAGS --retain"
+                [ -n "$VTY_ADDR" ] && FLAGS="$FLAGS --vty_addr $VTY_ADDR"
+                [ -n "$VTY_PORT" ] && FLAGS="$FLAGS --vty_port $VTY_PORT"
 		msg_starting ripngd
 		daemon ripngd $FLAGS 
 		RETVAL=$?

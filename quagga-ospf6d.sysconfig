@@ -3,3 +3,10 @@
 # Nice level for routing daemon [-10 - +10]
 SERVICE_RUN_NICE_LEVEL="+2"
 
+# The address that the ospf6d VTY will listen on.
+# Default is all intrefaces.
+#VTY_ADDR=127.0.0.1
+
+# The port that the ospf6d VTY will listen on.
+# Default is 2606.
+#VTY_PORT=2606

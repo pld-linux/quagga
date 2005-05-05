@@ -8,3 +8,11 @@ SERVICE_RUN_NICE_LEVEL="+2"
 
 # When program terminates, retain added route by zebra.
 #RETAIN_ROUTES=yes
+
+# The address that the zebra VTY will listen on.
+# Default is all intrefaces.
+#VTY_ADDR=127.0.0.1
+
+# The port that the zebra VTY will listen on.
+# Default is 2601.
+#VTY_PORT=2601
