@@ -3,7 +3,7 @@ Summary:	Routing Software Suite
 Summary(pl):	Zestaw oprogramowania do routingu
 Name:		quagga
 Version:	0.99.1
-Release:	1
+Release:	2
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://www.quagga.net/download/%{name}-%{version}.tar.gz
@@ -15,18 +15,21 @@ Source12:	%{name}-ospf6d.init
 Source13:	%{name}-ospfd.init
 Source14:	%{name}-ripd.init
 Source15:	%{name}-ripngd.init
+Source16:	%{name}-isisd.init
 Source20:	%{name}-zebra.sysconfig
 Source21:	%{name}-bgpd.sysconfig
 Source22:	%{name}-ospf6d.sysconfig
 Source23:	%{name}-ospfd.sysconfig
 Source24:	%{name}-ripd.sysconfig
 Source25:	%{name}-ripngd.sysconfig
+Source26:	%{name}-isisd.sysconfig
 Source30:	%{name}-zebra.logrotate
 Source31:	%{name}-bgpd.logrotate
 Source32:	%{name}-ospfd.logrotate
 Source33:	%{name}-ospf6d.logrotate
-Source34:	%{name}-ripngd.logrotate
-Source35:	%{name}-ripd.logrotate
+Source34:	%{name}-ripd.logrotate
+Source35:	%{name}-ripngd.logrotate
+Source36:	%{name}-isisd.logrotate
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-proc.patch
 Patch2:		%{name}-ospf_lsdb.patch
@@ -153,6 +156,16 @@ RIP routing daemon for IPv6 networks.
 %description ripngd -l pl
 Demon obs³ugi protoko³u RIP w sieciach IPv6.
 
+%package isisd
+Summary:	IS-IS routing daemon
+Summary(pl):	Demon routingu IS-IS
+Group:		Networking/Daemons
+Requires:	%{name} = %{version}-%{release}
+Requires(post,preun):	/sbin/chkconfig
+
+%description isisd
+IS-IS routing daemon.
+
 %package devel
 Summary:	Header files for quagga libraries
 Summary(pl):	Pliki nag³ówkowe bibliotek quagga
@@ -205,6 +218,9 @@ Statyczne wersje bibliotek quagga.
 	--enable-group=quagga \
 	--enable-vty-group=quaggavty \
 	--enable-rtadv \
+	--enable-isisd \
+	--disable-isis-topology \
+	--enable-irdp \
         --disable-watchquagga \
 	--with-libpam
 
@@ -228,6 +244,7 @@ install %{SOURCE12} $RPM_BUILD_ROOT/etc/rc.d/init.d/ospf6d
 install %{SOURCE13} $RPM_BUILD_ROOT/etc/rc.d/init.d/ospfd
 install %{SOURCE14} $RPM_BUILD_ROOT/etc/rc.d/init.d/ripd
 install %{SOURCE15} $RPM_BUILD_ROOT/etc/rc.d/init.d/ripngd
+install %{SOURCE16} $RPM_BUILD_ROOT/etc/rc.d/init.d/isisd
 
 install %{SOURCE20} $RPM_BUILD_ROOT/etc/sysconfig/zebra
 install %{SOURCE21} $RPM_BUILD_ROOT/etc/sysconfig/bgpd
@@ -235,6 +252,7 @@ install %{SOURCE22} $RPM_BUILD_ROOT/etc/sysconfig/ospf6d
 install %{SOURCE23} $RPM_BUILD_ROOT/etc/sysconfig/ospfd
 install %{SOURCE24} $RPM_BUILD_ROOT/etc/sysconfig/ripd
 install %{SOURCE25} $RPM_BUILD_ROOT/etc/sysconfig/ripngd
+install %{SOURCE26} $RPM_BUILD_ROOT/etc/sysconfig/isisd
 
 install %{SOURCE30} $RPM_BUILD_ROOT/etc/logrotate.d/zebra
 install %{SOURCE31} $RPM_BUILD_ROOT/etc/logrotate.d/bgpd
@@ -242,10 +260,11 @@ install %{SOURCE32} $RPM_BUILD_ROOT/etc/logrotate.d/ospfd
 install %{SOURCE33} $RPM_BUILD_ROOT/etc/logrotate.d/ospf6d
 install %{SOURCE34} $RPM_BUILD_ROOT/etc/logrotate.d/ripd
 install %{SOURCE35} $RPM_BUILD_ROOT/etc/logrotate.d/ripngd
+install %{SOURCE36} $RPM_BUILD_ROOT/etc/logrotate.d/isisd
 
-touch $RPM_BUILD_ROOT/var/log/%{name}/{zebra,bgpd,ospf6d,ospfd,ripd,ripngd}.log
+touch $RPM_BUILD_ROOT/var/log/%{name}/{zebra,bgpd,ospf6d,ospfd,ripd,ripngd,isisd}.log
 
-touch $RPM_BUILD_ROOT%{_sysconfdir}/{vtysh,zebra,bgpd,ospf6d,ospfd,ripd,ripngd}.conf
+touch $RPM_BUILD_ROOT%{_sysconfdir}/{vtysh,zebra,bgpd,ospf6d,ospfd,ripd,ripngd,isisd}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -324,6 +343,17 @@ else
 	echo "Run '/etc/rc.d/init.d/ripngd start' to start ripngd routing deamon." >&2
 fi
 
+%post isisd
+/sbin/chkconfig --add isisd >&2
+if [ ! -s %{_sysconfdir}/isisd.conf ]; then
+	echo "hostname `hostname`" > %{_sysconfdir}/isisd.conf
+fi
+if [ -f /var/lock/subsys/isisd ]; then
+	/etc/rc.d/init.d/isisd restart >&2
+else
+	echo "Run '/etc/rc.d/init.d/isisd start' to start IS-IS routing deamon." >&2
+fi
+
 %preun
 if [ "$1" = "0" ]; then
 	if [ -f /var/lock/subsys/zebra ]; then
@@ -370,6 +400,14 @@ if [ "$1" = "0" ]; then
 		/etc/rc.d/init.d/ripngd stop >&2
 	fi
 	/sbin/chkconfig --del ripngd >&2
+fi
+
+%preun isisd
+if [ "$1" = "0" ]; then
+	if [ -f /var/lock/subsys/isisd ]; then
+		/etc/rc.d/init.d/isisd stop >&2
+	fi
+	/sbin/chkconfig --del isisd >&2
 fi
 
 %postun
@@ -457,6 +495,17 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/sysconfig/ripngd
 %config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/logrotate.d/ripngd
 %ghost /var/log/%{name}/ripngd*
+
+%files isisd
+%defattr(644,root,root,755)
+%doc isisd/*sample*
+%{_mandir}/man8/isisd*
+%attr(755,root,root) %{_sbindir}/isisd
+%attr(754,root,root) /etc/rc.d/init.d/isisd
+%config(noreplace) %verify(not md5 mtime size) %attr(660,root,quagga) %{_sysconfdir}/isisd.conf
+%config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/sysconfig/isisd
+%config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/logrotate.d/isisd
+%ghost /var/log/%{name}/isisd*
 
 %files devel
 %defattr(644,root,root,755)
