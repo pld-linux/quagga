@@ -6,7 +6,7 @@ Release:	1
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://www.quagga.net/download/%{name}-%{version}.tar.gz
-# Source0-md5:	6be0067d14c3c5a260a754f8501434c5
+# Source0-md5:	c68e409931449afc5730289d3105f502
 Source1:	%{name}.pam
 Source10:	%{name}-zebra.init
 Source11:	%{name}-bgpd.init
