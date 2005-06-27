@@ -1,13 +1,12 @@
-# Back to 0.97.4, with 0.98.0 some problems with autoconf(?)
 Summary:	Routing Software Suite
 Summary(pl):	Zestaw oprogramowania do routingu
 Name:		quagga
-Version:	0.98.3
-Release:	2
+Version:	0.98.4
+Release:	1
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://www.quagga.net/download/%{name}-%{version}.tar.gz
-# Source0-md5:	68be5e911e4d604c0f5959338263356e
+# Source0-md5:	6be0067d14c3c5a260a754f8501434c5
 Source1:	%{name}.pam
 Source10:	%{name}-zebra.init
 Source11:	%{name}-bgpd.init
@@ -33,6 +32,7 @@ Patch2:		%{name}-netlink.patch
 Patch3:		%{name}-ospf_lsdb.patch
 Patch4:		%{name}-ospfclient.patch
 Patch5:		%{name}-vtysh-pam.patch
+Patch6:		%{name}-blackhole.patch
 URL:		http://www.quagga.net/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
@@ -186,6 +186,7 @@ Statyczne wersje bibliotek quagga.
 %patch3 -p0
 %patch4 -p0
 %patch5 -p1
+%patch6 -p1
 
 %build
 %{__aclocal}
