@@ -1,4 +1,4 @@
-# Customized setings for zebra isisd
+# Customized settings for zebra isisd
 
 # Nice level for routing daemon [-10 - +10]
 SERVICE_RUN_NICE_LEVEL="+2"
@@ -7,7 +7,7 @@ SERVICE_RUN_NICE_LEVEL="+2"
 #RETAIN_ROUTES=yes
 
 # The address that the ripngd VTY will listen on.
-# Default is all intrefaces.
+# Default is all interfaces.
 #VTY_ADDR=127.0.0.1
 
 # The port that the ripngd VTY will listen on.
