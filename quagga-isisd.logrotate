@@ -1,6 +1,7 @@
 /var/log/quagga/isisd.log {
 	missingok
 	olddir /var/log/archiv/quagga
+	create 640 quagga quagga
 	postrotate
 		/bin/killall -USR1 isisd >/dev/null 2>&1
 	endscript

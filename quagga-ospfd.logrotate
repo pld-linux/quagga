@@ -1,6 +1,7 @@
 /var/log/quagga/ospfd.log {
 	missingok
 	olddir /var/log/archiv/quagga
+	create 640 quagga quagga
 	postrotate
 		/bin/killall -USR1 ospfd >/dev/null 2>&1
 	endscript
