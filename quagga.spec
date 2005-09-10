@@ -3,7 +3,7 @@ Summary:	Routing Software Suite
 Summary(pl):	Zestaw oprogramowania do routingu
 Name:		quagga
 Version:	0.99.1
-Release:	3
+Release:	4
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://www.quagga.net/download/%{name}-%{version}.tar.gz
@@ -221,7 +221,7 @@ Statyczne wersje bibliotek quagga.
 	--enable-isisd \
 	--disable-isis-topology \
 	--enable-irdp \
-        --disable-watchquagga \
+	--disable-watchquagga \
 	--with-libpam
 
 %{__make}
