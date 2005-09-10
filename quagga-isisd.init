@@ -2,7 +2,7 @@
 #
 # ripngd		Starts the IS-IS Dynamic Route Daemon 
 #
-# chkconfig:	345 16 84
+# chkconfig:	345 15 84
 #
 # description:	IS-IS Dynamic Route Daemon
 #
