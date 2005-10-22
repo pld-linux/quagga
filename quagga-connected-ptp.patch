@@ -1,0 +1,50 @@
+Index: lib/if.c
+===================================================================
+RCS file: /var/cvsroot/quagga/lib/if.c,v
+retrieving revision 1.31
+diff -b -u -p -r1.31 if.c
+--- lib/if.c	6 May 2005 21:25:49 -0000	1.31
++++ lib/if.c	22 Oct 2005 19:19:25 -0000
+@@ -291,7 +291,7 @@ if_lookup_address (struct in_addr src)
+ 	{
+ 	  if (c->address && (c->address->family == AF_INET))
+ 	    {
+-	      if (CONNECTED_POINTOPOINT_HOST(c))
++	      if (CONNECTED_DEST_HOST(c))
+ 		{
+ 		 /* PTP  links are conventionally identified 
+ 		    by the address of the far end - MAG */
+@@ -697,7 +697,7 @@ connected_lookup_address (struct interfa
+     {
+       if (c->address && (c->address->family == AF_INET))
+         {
+-	  if (CONNECTED_POINTOPOINT_HOST(c))
++	  if (CONNECTED_DEST_HOST(c))
+ 	    {
+ 		     /* PTP  links are conventionally identified 
+ 			by the address of the far end - MAG */
+Index: zebra/connected.c
+===================================================================
+RCS file: /var/cvsroot/quagga/zebra/connected.c,v
+retrieving revision 1.18
+diff -b -u -p -r1.18 connected.c
+--- zebra/connected.c	11 Oct 2005 03:53:54 -0000	1.18
++++ zebra/connected.c	22 Oct 2005 19:19:25 -0000
+@@ -126,7 +126,7 @@ connected_up_ipv4 (struct interface *ifp
+   p.prefixlen = addr->prefixlen;
+ 
+   /* Point-to-point check. */
+-  if (CONNECTED_POINTOPOINT_HOST(ifc))
++  if (CONNECTED_DEST_HOST(ifc))
+     p.prefix = dest->prefix;
+   else
+     p.prefix = addr->prefix;
+@@ -246,7 +246,7 @@ connected_down_ipv4 (struct interface *i
+   p.prefixlen = addr->prefixlen;
+ 
+   /* Point-to-point check. */
+-  if (CONNECTED_POINTOPOINT_HOST(ifc))
++  if (CONNECTED_DEST_HOST(ifc))
+     p.prefix = dest->prefix;
+   else
+     p.prefix = addr->prefix;
