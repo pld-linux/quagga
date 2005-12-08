@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# zebra		Starts the Dynamic Route Daemon 
+# zebra		Starts the Dynamic Route Daemon
 #
 # chkconfig:	345 13 85
 #

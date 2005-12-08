@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# ripngd		Starts the IS-IS Dynamic Route Daemon 
+# ripngd		Starts the IS-IS Dynamic Route Daemon
 #
 # chkconfig:	345 15 84
 #
@@ -40,7 +40,7 @@ case "$1" in
                 [ -n "$VTY_ADDR" ] && FLAGS="$FLAGS --vty_addr $VTY_ADDR"
                 [ -n "$VTY_PORT" ] && FLAGS="$FLAGS --vty_port $VTY_PORT"
 		msg_starting isisd
-		daemon isisd $FLAGS 
+		daemon isisd $FLAGS
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/isisd
 	else
