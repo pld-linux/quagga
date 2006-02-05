@@ -1,8 +1,8 @@
 #!/bin/sh
 #
-# zebra		Starts the Dynamic Route Daemon 
+# zebra		Starts the Dynamic Route Daemon
 #
-# chkconfig:	345 15 85
+# chkconfig:	345 13 85
 #
 # description:	Dynamic Route Daemon for IPv4 and IPv6 routers
 #
@@ -22,7 +22,6 @@
 # Check that networking is up.
 if is_yes "${NETWORKING}"; then
 	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
-		# nls "ERROR: Networking is down. %s can't be run." <service>
 		msg_network_down zebra
 		exit 1
 	fi
@@ -69,6 +68,27 @@ case "$1" in
   restart|force-reload)
 	$0 stop
 	$0 start
+	R=$?
+	if [ $R -eq 0 ]; then
+		if [ -f /var/lock/subsys/bgpd ]; then
+			/etc/rc.d/init.d/bgpd "$1"
+		fi
+		if [ -f /var/lock/subsys/isisd ]; then
+			/etc/rc.d/init.d/isisd "$1"
+		fi
+		if [ -f /var/lock/subsys/ospfd ]; then
+			/etc/rc.d/init.d/ospfd "$1"
+		fi
+		if [ -f /var/lock/subsys/ospf6d ]; then
+			/etc/rc.d/init.d/ospf6d "$1"
+		fi
+		if [ -f /var/lock/subsys/ripd ]; then
+			/etc/rc.d/init.d/ripd "$1"
+		fi
+		if [ -f /var/lock/subsys/ripngd ]; then
+			/etc/rc.d/init.d/ripngd "$1"
+		fi
+	fi
 	exit $?
 	;;
   *)
