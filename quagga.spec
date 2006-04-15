@@ -283,7 +283,7 @@ umask 027
 if [ ! -s %{_sysconfdir}/zebra.conf ]; then
 	echo "hostname `hostname`" > %{_sysconfdir}/zebra.conf
 fi
-%service zebra restart "main routing deamon"
+%service zebra restart "main routing daemon"
 
 %post bgpd
 /sbin/chkconfig --add bgpd >&2
@@ -297,35 +297,35 @@ fi
 if [ ! -s %{_sysconfdir}/ospfd.conf ]; then
 	echo "hostname `hostname`" > %{_sysconfdir}/ospfd.conf
 fi
-%service ospfd restart "ospfd routing deamon"
+%service ospfd restart "ospfd routing daemon"
 
 %post ospf6d
 /sbin/chkconfig --add ospf6d >&2
 if [ ! -s %{_sysconfdir}/ospf6d.conf ]; then
 	echo "hostname `hostname`" > %{_sysconfdir}/ospf6d.conf
 fi
-%service ospf6d restart "ospf6d routing deamon"
+%service ospf6d restart "ospf6d routing daemon"
 
 %post ripd
 /sbin/chkconfig --add ripd >&2
 if [ ! -s %{_sysconfdir}/ripd.conf ]; then
 	echo "hostname `hostname`" > %{_sysconfdir}/ripd.conf
 fi
-%service ripd restart "ripd routing deamon"
+%service ripd restart "ripd routing daemon"
 
 %post ripngd
 /sbin/chkconfig --add ripngd >&2
 if [ ! -s %{_sysconfdir}/ripngd.conf ]; then
 	echo "hostname `hostname`" > %{_sysconfdir}/ripngd.conf
 fi
-%service ripngd restart "ripngd routing deamon"
+%service ripngd restart "ripngd routing daemon"
 
 %post isisd
 /sbin/chkconfig --add isisd >&2
 if [ ! -s %{_sysconfdir}/isisd.conf ]; then
 	echo "hostname `hostname`" > %{_sysconfdir}/isisd.conf
 fi
-%service isisd restart "IS-IS routing deamon"
+%service isisd restart "IS-IS routing daemon"
 
 %preun
 if [ "$1" = "0" ]; then
