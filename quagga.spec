@@ -44,16 +44,16 @@ BuildRequires:	perl-base
 BuildRequires:	readline-devel >= 4.1
 BuildRequires:	rpmbuild(macros) >= 1.202
 BuildRequires:	texinfo
-PreReq:		rc-scripts
-Requires(pre):	/bin/id
-Requires(pre):	/usr/bin/getgid
-Requires(pre):	/usr/sbin/groupadd
-Requires(pre):	/usr/sbin/useradd
 Requires(post):	/bin/hostname
 Requires(post):	/sbin/ldconfig
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
+Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires:	rc-scripts
 Provides:	group(quagga)
 Provides:	group(quaggavty)
 Provides:	routingdaemon
@@ -61,8 +61,8 @@ Provides:	user(quagga)
 Obsoletes:	bird
 Obsoletes:	gated
 Obsoletes:	mrt
-Obsoletes:	zebra-xs26
 Obsoletes:	quagga
+Obsoletes:	zebra-xs26
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/%{name}
@@ -117,8 +117,8 @@ Demon do obs³ugi protoko³u OSPF.
 Summary:	IPv6 OSPF routing daemon
 Summary(pl):	Demon routingu OSPF w sieciach IPv6
 Group:		Networking/Daemons
-Requires:	%{name} = %{version}-%{release}
 Requires(post,preun):	/sbin/chkconfig
+Requires:	%{name} = %{version}-%{release}
 Obsoletes:	zebra-xs26-ospf6d
 
 %description ospf6d
@@ -144,8 +144,8 @@ Demon obs³ugi protoko³u RIP.
 Summary:	IPv6 RIP routing daemon
 Summary(pl):	Demon routingu RIP w sieciach IPv6
 Group:		Networking/Daemons
-Requires:	%{name} = %{version}-%{release}
 Requires(post,preun):	/sbin/chkconfig
+Requires:	%{name} = %{version}-%{release}
 Obsoletes:	zebra-xs26-ripngd
 
 %description ripngd
