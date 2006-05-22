@@ -1,12 +1,12 @@
 Summary:	Routing Software Suite
 Summary(pl):	Zestaw oprogramowania do routingu
 Name:		quagga
-Version:	0.99.3
+Version:	0.99.4
 Release:	1
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://www.quagga.net/download/%{name}-%{version}.tar.gz
-# Source0-md5:	d11dfb2d0eb9fa93e1aca882541e45d8
+# Source0-md5:	a75d3f5ed0b3354274c28d195e3f6479
 Source1:	%{name}.pam
 Source10:	%{name}-zebra.init
 Source11:	%{name}-bgpd.init
@@ -127,7 +127,7 @@ Obsoletes:	zebra-xs26-ospf6d
 OSPF6 routing daemon for IPv6 networks.
 
 %description ospf6d -l pl
-Demon obs³ugi protoko³u OSPF w sieciach IPv6.
+Demon do obs³ugi protoko³u OSPF w sieciach IPv6.
 
 %package ripd
 Summary:	RIP routing daemon
