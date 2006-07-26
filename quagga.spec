@@ -232,7 +232,7 @@ rm -rf $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig,logrotate.d,pam.d} \
 	$RPM_BUILD_ROOT/var/log/{archiv,}/%{name} \
-	$RPM_BUILD_ROOT/%{_var}/run/%{name}
+	$RPM_BUILD_ROOT%{_var}/run/%{name}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
