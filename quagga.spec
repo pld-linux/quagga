@@ -35,6 +35,7 @@ Patch2:		%{name}-ospf_lsdb.patch
 Patch3:		%{name}-ospfclient.patch
 Patch4:		%{name}-vtysh-pam.patch
 Patch5:		%{name}-rt-netlink.patch
+Patch6:		%{name}-largefile.patch
 URL:		http://www.quagga.net/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
@@ -198,6 +199,7 @@ Statyczne wersje bibliotek quagga.
 %patch3 -p0
 %patch4 -p1
 %patch5 -p0
+%patch6 -p1
 
 %build
 %{__aclocal}
