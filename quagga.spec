@@ -1,5 +1,5 @@
 Summary:	Routing Software Suite
-Summary(pl):	Zestaw oprogramowania do routingu
+Summary(pl.UTF-8):   Zestaw oprogramowania do routingu
 Name:		quagga
 Version:	0.99.6
 Release:	1
@@ -81,18 +81,18 @@ Quagga is a fork of GNU Zebra which was developed by Kunihiro
 Ishiguro. The Quagga tree aims to build a more involved community
 around Quagga than the current centralised model of GNU Zebra.
 
-%description -l pl
-Quagga to zestaw oprogramowania do routingu, dostarczaj±cy
+%description -l pl.UTF-8
+Quagga to zestaw oprogramowania do routingu, dostarczajƒÖcy
 implementacje OSPFv2, OSPFv3, RIP v1 i v2, RIPv3 i BGPv4 dla platform
-uniksowych, w szczegÛlno∂ci FreeBSD, Linuksa, NetBSD - øeby wymieniÊ
-tylko kilka. Quagga to odga≥Ízienie projektu GNU Zebra, ktÛry by≥
+uniksowych, w szczeg√≥lno≈õci FreeBSD, Linuksa, NetBSD - ≈ºeby wymieniƒá
+tylko kilka. Quagga to odga≈Çƒôzienie projektu GNU Zebra, kt√≥ry by≈Ç
 rozwijany przez Kunihiro Ishiguro. Celem drzewa Quagga jest
-zgromadzenie bardziej zaangaøowanej spo≥eczno∂ci wokÛ≥ projektu, niø w
+zgromadzenie bardziej zaanga≈ºowanej spo≈Çeczno≈õci wok√≥≈Ç projektu, ni≈º w
 aktualnie scentralizowanym modelu GNU Zebry.
 
 %package bgpd
 Summary:	BGP routing daemon
-Summary(pl):	Demon routingu BGP
+Summary(pl.UTF-8):   Demon routingu BGP
 Group:		Networking/Daemons
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{version}-%{release}
@@ -101,12 +101,12 @@ Obsoletes:	zebra-xs26-bgpd
 %description bgpd
 BGP routing daemon. Includes IPv6 support.
 
-%description bgpd -l pl
-Demon obs≥ugi protoko≥u BGP. Obs≥uguje takøe IPv6.
+%description bgpd -l pl.UTF-8
+Demon obs≈Çugi protoko≈Çu BGP. Obs≈Çuguje tak≈ºe IPv6.
 
 %package ospfd
 Summary:	OSPF routing daemon
-Summary(pl):	Demon routingu OSPF
+Summary(pl.UTF-8):   Demon routingu OSPF
 Group:		Networking/Daemons
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{version}-%{release}
@@ -114,12 +114,12 @@ Requires:	%{name} = %{version}-%{release}
 %description ospfd
 OSPF routing daemon.
 
-%description ospfd -l pl
-Demon do obs≥ugi protoko≥u OSPF.
+%description ospfd -l pl.UTF-8
+Demon do obs≈Çugi protoko≈Çu OSPF.
 
 %package ospf6d
 Summary:	IPv6 OSPF routing daemon
-Summary(pl):	Demon routingu OSPF w sieciach IPv6
+Summary(pl.UTF-8):   Demon routingu OSPF w sieciach IPv6
 Group:		Networking/Daemons
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{version}-%{release}
@@ -128,12 +128,12 @@ Obsoletes:	zebra-xs26-ospf6d
 %description ospf6d
 OSPF6 routing daemon for IPv6 networks.
 
-%description ospf6d -l pl
-Demon do obs≥ugi protoko≥u OSPF w sieciach IPv6.
+%description ospf6d -l pl.UTF-8
+Demon do obs≈Çugi protoko≈Çu OSPF w sieciach IPv6.
 
 %package ripd
 Summary:	RIP routing daemon
-Summary(pl):	Demon routingu RIP
+Summary(pl.UTF-8):   Demon routingu RIP
 Group:		Networking/Daemons
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{version}-%{release}
@@ -141,12 +141,12 @@ Requires:	%{name} = %{version}-%{release}
 %description ripd
 RIP routing daemon for zebra.
 
-%description ripd -l pl
-Demon obs≥ugi protoko≥u RIP.
+%description ripd -l pl.UTF-8
+Demon obs≈Çugi protoko≈Çu RIP.
 
 %package ripngd
 Summary:	IPv6 RIP routing daemon
-Summary(pl):	Demon routingu RIP w sieciach IPv6
+Summary(pl.UTF-8):   Demon routingu RIP w sieciach IPv6
 Group:		Networking/Daemons
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{version}-%{release}
@@ -155,12 +155,12 @@ Obsoletes:	zebra-xs26-ripngd
 %description ripngd
 RIP routing daemon for IPv6 networks.
 
-%description ripngd -l pl
-Demon obs≥ugi protoko≥u RIP w sieciach IPv6.
+%description ripngd -l pl.UTF-8
+Demon obs≈Çugi protoko≈Çu RIP w sieciach IPv6.
 
 %package isisd
 Summary:	IS-IS routing daemon
-Summary(pl):	Demon routingu IS-IS
+Summary(pl.UTF-8):   Demon routingu IS-IS
 Group:		Networking/Daemons
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{version}-%{release}
@@ -170,26 +170,26 @@ IS-IS routing daemon.
 
 %package devel
 Summary:	Header files for quagga libraries
-Summary(pl):	Pliki nag≥Ûwkowe bibliotek quagga
+Summary(pl.UTF-8):   Pliki nag≈Ç√≥wkowe bibliotek quagga
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description devel
 Header files for quagga libraries.
 
-%description devel -l pl
-Pliki nag≥Ûwkowe bibliotek quagga.
+%description devel -l pl.UTF-8
+Pliki nag≈Ç√≥wkowe bibliotek quagga.
 
 %package static
 Summary:	Static version of quagga libraries
-Summary(pl):	Statyczne wersje bibliotek quagga
+Summary(pl.UTF-8):   Statyczne wersje bibliotek quagga
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static version of quagga libraries.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Statyczne wersje bibliotek quagga.
 
 %prep
