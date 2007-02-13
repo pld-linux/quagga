@@ -1,5 +1,5 @@
 Summary:	Routing Software Suite
-Summary(pl.UTF-8):   Zestaw oprogramowania do routingu
+Summary(pl.UTF-8):	Zestaw oprogramowania do routingu
 Name:		quagga
 Version:	0.99.6
 Release:	1
@@ -92,7 +92,7 @@ aktualnie scentralizowanym modelu GNU Zebry.
 
 %package bgpd
 Summary:	BGP routing daemon
-Summary(pl.UTF-8):   Demon routingu BGP
+Summary(pl.UTF-8):	Demon routingu BGP
 Group:		Networking/Daemons
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{version}-%{release}
@@ -106,7 +106,7 @@ Demon obsługi protokołu BGP. Obsługuje także IPv6.
 
 %package ospfd
 Summary:	OSPF routing daemon
-Summary(pl.UTF-8):   Demon routingu OSPF
+Summary(pl.UTF-8):	Demon routingu OSPF
 Group:		Networking/Daemons
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{version}-%{release}
@@ -119,7 +119,7 @@ Demon do obsługi protokołu OSPF.
 
 %package ospf6d
 Summary:	IPv6 OSPF routing daemon
-Summary(pl.UTF-8):   Demon routingu OSPF w sieciach IPv6
+Summary(pl.UTF-8):	Demon routingu OSPF w sieciach IPv6
 Group:		Networking/Daemons
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{version}-%{release}
@@ -133,7 +133,7 @@ Demon do obsługi protokołu OSPF w sieciach IPv6.
 
 %package ripd
 Summary:	RIP routing daemon
-Summary(pl.UTF-8):   Demon routingu RIP
+Summary(pl.UTF-8):	Demon routingu RIP
 Group:		Networking/Daemons
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{version}-%{release}
@@ -146,7 +146,7 @@ Demon obsługi protokołu RIP.
 
 %package ripngd
 Summary:	IPv6 RIP routing daemon
-Summary(pl.UTF-8):   Demon routingu RIP w sieciach IPv6
+Summary(pl.UTF-8):	Demon routingu RIP w sieciach IPv6
 Group:		Networking/Daemons
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{version}-%{release}
@@ -160,7 +160,7 @@ Demon obsługi protokołu RIP w sieciach IPv6.
 
 %package isisd
 Summary:	IS-IS routing daemon
-Summary(pl.UTF-8):   Demon routingu IS-IS
+Summary(pl.UTF-8):	Demon routingu IS-IS
 Group:		Networking/Daemons
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{version}-%{release}
@@ -170,7 +170,7 @@ IS-IS routing daemon.
 
 %package devel
 Summary:	Header files for quagga libraries
-Summary(pl.UTF-8):   Pliki nagłówkowe bibliotek quagga
+Summary(pl.UTF-8):	Pliki nagłówkowe bibliotek quagga
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
@@ -182,7 +182,7 @@ Pliki nagłówkowe bibliotek quagga.
 
 %package static
 Summary:	Static version of quagga libraries
-Summary(pl.UTF-8):   Statyczne wersje bibliotek quagga
+Summary(pl.UTF-8):	Statyczne wersje bibliotek quagga
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
