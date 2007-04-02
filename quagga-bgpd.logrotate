@@ -1,6 +1,6 @@
 /var/log/quagga/bgpd.log {
 	missingok
-	olddir /var/log/archiv/quagga
+	olddir /var/log/archive/quagga
 	create 640 quagga quagga
 	postrotate
 		/bin/killall -USR1 bgpd >/dev/null 2>&1
