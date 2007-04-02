@@ -393,7 +393,7 @@ fi
 %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/zebra
 %dir %attr(770,root,quagga) /var/run/%{name}
 %dir %attr(750,quagga,quagga) /var/log/%{name}
-%dir %attr(750,root,root) /var/log/archiv/%{name}
+%dir %attr(750,root,root) /var/log/archive/%{name}
 %attr(755,root,root) %{_libdir}/lib*.so.*.*.*
 %doc zebra/*sample*
 %{_mandir}/man8/zebra*
