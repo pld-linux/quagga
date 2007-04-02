@@ -2,7 +2,7 @@ Summary:	Routing Software Suite
 Summary(pl.UTF-8):	Zestaw oprogramowania do routingu
 Name:		quagga
 Version:	0.99.6
-Release:	2
+Release:	3
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://www.quagga.net/download/%{name}-%{version}.tar.gz
@@ -235,7 +235,7 @@ Statyczne wersje bibliotek quagga.
 rm -rf $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig,logrotate.d,pam.d} \
-	$RPM_BUILD_ROOT/var/log/{archiv,}/%{name} \
+	$RPM_BUILD_ROOT/var/log/{archive,}/%{name} \
 	$RPM_BUILD_ROOT%{_var}/run/%{name}
 
 %{__make} install \
