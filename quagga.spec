@@ -107,13 +107,6 @@ BGP routing daemon. Includes IPv6 support.
 %description bgpd -l pl.UTF-8
 Demon obsługi protokołu BGP. Obsługuje także IPv6.
 
-%package ospfd
-Summary:	OSPF routing daemon
-Summary(pl.UTF-8):	Demon routingu OSPF
-Group:		Networking/Daemons
-Requires(post,preun):	/sbin/chkconfig
-Requires:	%{name} = %{version}-%{release}
-
 %package isisd
 Summary:	IS-IS routing daemon
 Summary(pl.UTF-8):	Demon routingu IS-IS
@@ -123,6 +116,13 @@ Requires:	%{name} = %{version}-%{release}
 
 %description isisd
 IS-IS routing daemon.
+
+%package ospfd
+Summary:	OSPF routing daemon
+Summary(pl.UTF-8):	Demon routingu OSPF
+Group:		Networking/Daemons
+Requires(post,preun):	/sbin/chkconfig
+Requires:	%{name} = %{version}-%{release}
 
 %description ospfd
 OSPF routing daemon.
