@@ -37,6 +37,8 @@ Patch4:		%{name}-vtysh-pam.patch
 Patch5:		%{name}-rt-netlink.patch
 Patch6:		%{name}-largefile.patch
 Patch7:		%{name}-link.patch
+Patch8:		%{name}-view_commands.patch
+Patch9:		%{name}-save_history.patch
 URL:		http://www.quagga.net/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
@@ -112,6 +114,16 @@ Group:		Networking/Daemons
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{version}-%{release}
 
+%package isisd
+Summary:	IS-IS routing daemon
+Summary(pl.UTF-8):	Demon routingu IS-IS
+Group:		Networking/Daemons
+Requires(post,preun):	/sbin/chkconfig
+Requires:	%{name} = %{version}-%{release}
+
+%description isisd
+IS-IS routing daemon.
+
 %description ospfd
 OSPF routing daemon.
 
@@ -159,16 +171,6 @@ RIP routing daemon for IPv6 networks.
 %description ripngd -l pl.UTF-8
 Demon obsługi protokołu RIP w sieciach IPv6.
 
-%package isisd
-Summary:	IS-IS routing daemon
-Summary(pl.UTF-8):	Demon routingu IS-IS
-Group:		Networking/Daemons
-Requires(post,preun):	/sbin/chkconfig
-Requires:	%{name} = %{version}-%{release}
-
-%description isisd
-IS-IS routing daemon.
-
 %package devel
 Summary:	Header files for quagga libraries
 Summary(pl.UTF-8):	Pliki nagłówkowe bibliotek quagga
@@ -203,6 +205,8 @@ Statyczne wersje bibliotek quagga.
 #%patch5 -p0
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
+%patch9 -p1
 
 %build
 %{__libtoolize}
@@ -236,7 +240,7 @@ Statyczne wersje bibliotek quagga.
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig,logrotate.d,pam.d} \
+install -d $RPM_BUILD_ROOT/etc/{env.d,logrotate.d,pam.d,rc.d/init.d,sysconfig} \
 	$RPM_BUILD_ROOT/var/log/{archive,}/%{name} \
 	$RPM_BUILD_ROOT%{_var}/run/%{name}
 
@@ -273,6 +277,8 @@ touch $RPM_BUILD_ROOT/var/log/%{name}/{zebra,bgpd,ospf6d,ospfd,ripd,ripngd,isisd
 
 touch $RPM_BUILD_ROOT%{_sysconfdir}/{vtysh,zebra,bgpd,ospf6d,ospfd,ripd,ripngd,isisd}.conf
 
+echo '#VTYSH_PAGER="less -F"' > $RPM_BUILD_ROOT/etc/env.d/VTYSH_PAGER
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -297,6 +303,13 @@ if [ ! -s %{_sysconfdir}/bgpd.conf ]; then
 	echo "hostname `hostname`" > %{_sysconfdir}/bgpd.conf
 fi
 %service bgpd restart "bgpd routing daemon"
+
+%post isisd
+/sbin/chkconfig --add isisd >&2
+if [ ! -s %{_sysconfdir}/isisd.conf ]; then
+	echo "hostname `hostname`" > %{_sysconfdir}/isisd.conf
+fi
+%service isisd restart "IS-IS routing daemon"
 
 %post ospfd
 /sbin/chkconfig --add ospfd >&2
@@ -326,13 +339,6 @@ if [ ! -s %{_sysconfdir}/ripngd.conf ]; then
 fi
 %service ripngd restart "ripngd routing daemon"
 
-%post isisd
-/sbin/chkconfig --add isisd >&2
-if [ ! -s %{_sysconfdir}/isisd.conf ]; then
-	echo "hostname `hostname`" > %{_sysconfdir}/isisd.conf
-fi
-%service isisd restart "IS-IS routing daemon"
-
 %preun
 if [ "$1" = "0" ]; then
 	%service zebra stop
@@ -343,6 +349,12 @@ fi
 if [ "$1" = "0" ]; then
 	%service bgpd stop
 	/sbin/chkconfig --del bgpd >&2
+fi
+
+%preun isisd
+if [ "$1" = "0" ]; then
+	%service isisd stop
+	/sbin/chkconfig --del isisd >&2
 fi
 
 %preun ospfd
@@ -369,12 +381,6 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del ripngd >&2
 fi
 
-%preun isisd
-if [ "$1" = "0" ]; then
-	%service isisd stop
-	/sbin/chkconfig --del isisd >&2
-fi
-
 %postun
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
 if [ "$1" = "0" ]; then
@@ -389,10 +395,12 @@ fi
 %{_infodir}/*info*
 %{_mandir}/man1/*
 %attr(755,root,root) %{_bindir}/*
+%config(noreplace,missingok) %verify(not md5 mtime size) /etc/env.d/VTYSH_PAGER
+%config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/logrotate.d/zebra
+%config(noreplace) %verify(not md5 mtime size) /etc/pam.d/zebra
 %dir %attr(770,root,quagga) %{_sysconfdir}
 %config(noreplace) %verify(not md5 mtime size) %attr(660,root,quagga) %{_sysconfdir}/vtysh.conf
 %config(noreplace) %verify(not md5 mtime size) %attr(660,root,quagga) %{_sysconfdir}/zebra.conf
-%config(noreplace) %verify(not md5 mtime size) /etc/pam.d/zebra
 %dir %attr(770,root,quagga) /var/run/%{name}
 %dir %attr(750,quagga,quagga) /var/log/%{name}
 %dir %attr(750,root,root) /var/log/archive/%{name}
@@ -402,7 +410,6 @@ fi
 %attr(755,root,root) %{_sbindir}/zebra
 %attr(754,root,root) /etc/rc.d/init.d/zebra
 %config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/sysconfig/zebra
-%config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/logrotate.d/zebra
 %ghost /var/log/%{name}/zebra*
 
 %files bgpd
@@ -415,6 +422,17 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/sysconfig/bgpd
 %config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/logrotate.d/bgpd
 %ghost /var/log/%{name}/bgpd*
+
+%files isisd
+%defattr(644,root,root,755)
+%doc isisd/*sample*
+%{_mandir}/man8/isisd*
+%attr(755,root,root) %{_sbindir}/isisd
+%attr(754,root,root) /etc/rc.d/init.d/isisd
+%config(noreplace) %verify(not md5 mtime size) %attr(660,root,quagga) %{_sysconfdir}/isisd.conf
+%config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/sysconfig/isisd
+%config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/logrotate.d/isisd
+%ghost /var/log/%{name}/isisd*
 
 %files ospfd
 %defattr(644,root,root,755)
@@ -460,17 +478,6 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/sysconfig/ripngd
 %config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/logrotate.d/ripngd
 %ghost /var/log/%{name}/ripngd*
-
-%files isisd
-%defattr(644,root,root,755)
-%doc isisd/*sample*
-%{_mandir}/man8/isisd*
-%attr(755,root,root) %{_sbindir}/isisd
-%attr(754,root,root) /etc/rc.d/init.d/isisd
-%config(noreplace) %verify(not md5 mtime size) %attr(660,root,quagga) %{_sysconfdir}/isisd.conf
-%config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/sysconfig/isisd
-%config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/logrotate.d/isisd
-%ghost /var/log/%{name}/isisd*
 
 %files devel
 %defattr(644,root,root,755)
