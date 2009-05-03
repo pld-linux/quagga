@@ -9,7 +9,6 @@
 # processname:	zebra
 # config:	/etc/zebra/zebra.conf
 
-
 # Source function library
 . /etc/rc.d/init.d/functions
 
@@ -35,11 +34,13 @@ case "$1" in
   start)
 	# Check if the services are already running?
 	if [ ! -f /var/lock/subsys/zebra ]; then
-                FLAGS="--daemon"
-                [ -n "$VTY_ADDR" ] && FLAGS="$FLAGS --vty_addr $VTY_ADDR"
-                [ -n "$VTY_PORT" ] && FLAGS="$FLAGS --vty_port $VTY_PORT"
+		FLAGS="--daemon"
+		is_yes "$RETAIN_ROUTES" && FLAGS="$FLAGS --retain"
+		is_yes "$KEEP_KERNEL_ROUTES" && FLAGS="$FLAGS --keep_kernel"
+		[ -n "$VTY_ADDR" ] && FLAGS="$FLAGS --vty_addr $VTY_ADDR"
+		[ -n "$VTY_PORT" ] && FLAGS="$FLAGS --vty_port $VTY_PORT"
 		msg_starting zebra
-		daemon zebra $FLAGS
+		daemon /usr/sbin/zebra $FLAGS
 		RETVAL=$?
 		if [ $RETVAL -eq 0 ] ; then
 			touch /var/lock/subsys/zebra
@@ -54,7 +55,7 @@ case "$1" in
   stop)
 	if [ -f /var/lock/subsys/zebra ]; then
 		# Stop daemons.
- 		msg_stopping "zebra"
+		msg_stopping "zebra"
 		killproc zebra
 		rm -f /var/lock/subsys/zebra
 	else
@@ -89,7 +90,7 @@ case "$1" in
 			/etc/rc.d/init.d/ripngd "$1"
 		fi
 	fi
-	exit $?
+	exit $R
 	;;
   *)
 	msg_usage "$0 {start|stop|restart|force-reload|status}"
