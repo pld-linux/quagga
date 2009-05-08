@@ -40,6 +40,7 @@ Patch7:		%{name}-link.patch
 Patch8:		%{name}-view_commands.patch
 Patch9:		%{name}-save_history.patch
 Patch10:	%{name}-0.99.11-BGP-4-byte-ASN-bug-fixes.patch
+Patch11:	%{name}-readline.patch
 URL:		http://www.quagga.net/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
@@ -209,6 +210,7 @@ Statyczne wersje bibliotek quagga.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
+%patch11 -p1
 
 %build
 %{__libtoolize}

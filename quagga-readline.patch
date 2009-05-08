@@ -1,0 +1,11 @@
+diff -urN quagga-0.99.11.orig/vtysh/vtysh.c quagga-0.99.11/vtysh/vtysh.c
+--- quagga-0.99.11.orig/vtysh/vtysh.c	2008-09-05 16:27:26.000000000 +0200
++++ quagga-0.99.11/vtysh/vtysh.c	2009-05-08 17:41:22.000000000 +0200
+@@ -679,6 +679,7 @@
+ 	rl_pending_input = ' ';
+     }
+ 
++  rl_completion_suppress_append = 1;
+   return matches;
+ }
+ 
