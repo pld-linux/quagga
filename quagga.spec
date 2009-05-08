@@ -221,7 +221,6 @@ Statyczne wersje bibliotek quagga.
 	--enable-vtysh \
 	--enable-netlink \
 	--enable-snmp \
-	--enable-nssa \
 	--enable-opaque-lsa \
 	--enable-ospfapi=yes \
 	--enable-ospfclient=yes \
