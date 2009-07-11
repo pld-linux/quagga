@@ -1,49 +1,41 @@
---- quagga-0.99.11/configure.ac.orig	Sun Nov  2 05:12:19 2003
-+++ quagga-0.99.11/configure.ac	Mon Dec  1 13:33:26 2003
-@@ -933,41 +933,16 @@
+--- quagga-0.99.13/configure.ac.orig	2009-07-11 19:57:36.000000000 +0200
++++ quagga-0.99.13/configure.ac	2009-07-11 20:03:30.000000000 +0200
+@@ -951,37 +951,15 @@
  dnl -----------------------
  dnl check proc file system.
  dnl -----------------------
 -if test "$netlink" != yes; then
 -  if test -r /proc/net/dev; then
--    AC_DEFINE(HAVE_PROC_NET_DEV,,/proc/net/dev)
--    IF_PROC=if_proc.o
+     AC_DEFINE(HAVE_PROC_NET_DEV,,/proc/net/dev)
+     IF_PROC=if_proc.o
 -  fi
 -  if test -r /proc/net/if_inet6; then
--    AC_DEFINE(HAVE_PROC_NET_IF_INET6,,/proc/net/if_inet6)
+     AC_DEFINE(HAVE_PROC_NET_IF_INET6,,/proc/net/if_inet6)
 -    IF_PROC=if_proc.o
 -  fi
 -fi
-+AC_DEFINE(HAVE_PROC_NET_DEV,,/proc/net/dev)
-+IF_PROC=if_proc.o
-+AC_DEFINE(HAVE_PROC_NET_IF_INET6,,/proc/net/if_inet6)
  AC_SUBST(IF_PROC)
  
  dnl -----------------------------
  dnl check ipforward detect method
  dnl -----------------------------
--AC_CACHE_CHECK(ipforward method check, zebra_ipforward_path,
--[for zebra_ipforward_path in /proc/net/snmp /dev/ip /dev/null;
+-AC_CACHE_CHECK([ipforward method], [quagga_cv_ipforward_method],
+-[for quagga_cv_ipforward_method in /proc/net/snmp /dev/ip /dev/null;
 -do
--  test x`ls $zebra_ipforward_path 2>/dev/null` = x"$zebra_ipforward_path" && break
+-  test x`ls $quagga_cv_ipforward_method 2>/dev/null` = x"$quagga_cv_ipforward_method" && break
 -done
--case $zebra_ipforward_path in
--  "/proc/net/snmp")  IPFORWARD=ipforward_proc.o
--                     zebra_ipforward_path="proc";;
+-case $quagga_cv_ipforward_method in
+-  "/proc/net/snmp")  quagga_cv_ipforward_method="proc";;
 -  "/dev/ip")         
 -                     case "$host" in
--                       *-nec-sysv4*)  IPFORWARD=ipforward_ews.o
--                                      zebra_ipforward_path="ews";;
--                       *-freebsd*)    IPFORWARD=ipforward_sysctl.o
--                                      zebra_ipforward_path="sysctl";;
--                       *)             IPFORWARD=ipforward_solaris.o
--                                      zebra_ipforward_path="solaris";;
+-                       *-nec-sysv4*)  quagga_cv_ipforward_method="ews";;
+-                       *-freebsd*)    quagga_cv_ipforward_method="sysctl";;
+-                       *)             quagga_cv_ipforward_method="solaris";;
 -                     esac;;
--  *)                 IPFORWARD=ipforward_sysctl.o
--                     zebra_ipforward_path="sysctl";;
+-  *)                 quagga_cv_ipforward_method="sysctl";;
 -esac])
+-IPFORWARD=ipforward_${quagga_cv_ipforward_method}.o
 +IPFORWARD=ipforward_proc.o
-+zebra_ipforward_path="proc"
  AC_SUBST(IPFORWARD)
  
  AC_CHECK_FUNCS(getaddrinfo, [have_getaddrinfo=yes], [have_getaddrinfo=no])
