@@ -1,0 +1,12 @@
+diff -urN quagga-0.99.6.org/lib/Makefile.am quagga-0.99.6/lib/Makefile.am
+--- quagga-0.99.6.org/lib/Makefile.am	2006-06-27 09:48:16.000000000 +0200
++++ quagga-0.99.6/lib/Makefile.am	2006-12-22 19:56:17.919595000 +0100
+@@ -18,7 +18,7 @@
+ 
+ libzebra_la_DEPENDENCIES = @LIB_REGEX@
+ 
+-libzebra_la_LIBADD = @LIB_REGEX@
++libzebra_la_LIBADD = @LIB_REGEX@ @LIBCAP@
+ 
+ pkginclude_HEADERS = \
+ 	buffer.h checksum.h command.h filter.h getopt.h hash.h \

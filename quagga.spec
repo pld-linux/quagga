@@ -35,6 +35,7 @@ Patch2:		%{name}-ospf_lsdb.patch
 Patch3:		%{name}-ospfclient.patch
 Patch4:		%{name}-vtysh-pam.patch
 Patch6:		%{name}-largefile.patch
+Patch7:		%{name}-link.patch
 Patch8:		%{name}-view_commands.patch
 Patch9:		%{name}-save_history.patch
 Patch11:	%{name}-readline.patch
@@ -202,6 +203,7 @@ Statyczne wersje bibliotek quagga.
 %patch3 -p0
 %patch4 -p1
 %patch6 -p1
+%patch7 -p1
 %patch8 -p1
 %patch9 -p1
 %patch11 -p1
