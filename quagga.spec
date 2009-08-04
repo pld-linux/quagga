@@ -1,12 +1,12 @@
 Summary:	Routing Software Suite
 Summary(pl.UTF-8):	Zestaw oprogramowania do routingu
 Name:		quagga
-Version:	0.99.13
+Version:	0.99.14
 Release:	1
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://www.quagga.net/download/%{name}-%{version}.tar.gz
-# Source0-md5:	55a7d2dcf016580a7c7412b3518cd942
+# Source0-md5:	3a075fd5e26ec6d52f4a51b14a2d3c2c
 Source1:	%{name}.pam
 Source10:	%{name}-zebra.init
 Source11:	%{name}-bgpd.init
@@ -31,14 +31,9 @@ Source35:	%{name}-ripngd.logrotate
 Source36:	%{name}-isisd.logrotate
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-proc.patch
-Patch2:		%{name}-ospf_lsdb.patch
-Patch3:		%{name}-ospfclient.patch
-Patch4:		%{name}-vtysh-pam.patch
-Patch6:		%{name}-largefile.patch
-Patch7:		%{name}-link.patch
-Patch8:		%{name}-view_commands.patch
-Patch9:		%{name}-save_history.patch
-Patch11:	%{name}-readline.patch
+Patch2:		%{name}-vtysh-pam.patch
+Patch3:		%{name}-link.patch
+Patch4:		%{name}-readline.patch
 URL:		http://www.quagga.net/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
@@ -199,14 +194,8 @@ Statyczne wersje bibliotek quagga.
 %setup -q
 %patch0 -p1
 %patch1 -p1
-%patch2 -p0
-%patch3 -p0
-%patch4 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9 -p1
-%patch11 -p1
+%patch2 -p1
+%patch3 -p1
 
 %build
 %{__libtoolize}
