@@ -268,7 +268,7 @@ touch $RPM_BUILD_ROOT/var/log/%{name}/{zebra,bgpd,ospf6d,ospfd,ripd,ripngd,isisd
 
 touch $RPM_BUILD_ROOT%{_sysconfdir}/{vtysh,zebra,bgpd,ospf6d,ospfd,ripd,ripngd,isisd}.conf
 
-echo '#VTYSH_PAGER="less -F"' > $RPM_BUILD_ROOT/etc/env.d/VTYSH_PAGER
+echo '#VTYSH_PAGER="less -FX"' > $RPM_BUILD_ROOT/etc/env.d/VTYSH_PAGER
 
 %clean
 rm -rf $RPM_BUILD_ROOT
