@@ -35,6 +35,7 @@ Patch2:		%{name}-vtysh-pam.patch
 Patch3:		%{name}-link.patch
 Patch4:		%{name}-readline.patch
 Patch5:		%{name}-fix-ipremove.patch
+Patch5:		%{name}-blackhole.patch
 URL:		http://www.quagga.net/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
@@ -199,6 +200,7 @@ Statyczne wersje bibliotek quagga.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 %build
 %{__libtoolize}
