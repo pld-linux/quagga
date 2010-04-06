@@ -39,6 +39,7 @@ Patch6:		%{name}-blackhole.patch
 URL:		http://www.quagga.net/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
+BuildRequires:	gawk
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel >= 5.1
 BuildRequires:	net-snmp-devel
