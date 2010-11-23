@@ -2,7 +2,7 @@ Summary:	Routing Software Suite
 Summary(pl.UTF-8):	Zestaw oprogramowania do routingu
 Name:		quagga
 Version:	0.99.17
-Release:	3
+Release:	4
 License:	GPL v2+
 Group:		Networking/Daemons
 Source0:	http://www.quagga.net/download/%{name}-%{version}.tar.gz
@@ -73,6 +73,9 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_sysconfdir	/etc/%{name}
 %define		_includedir	%{_prefix}/include/%{name}
 %define		_localstatedir	%{_var}/run/%{name}
+
+# better fix by proper linking
+%define		skip_post_check_so	lib(zebra|ospf|ospfapiclient)\.so.*
 
 %description
 Quagga is a routing software suite, providing implementations of
