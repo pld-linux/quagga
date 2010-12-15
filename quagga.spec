@@ -75,7 +75,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_localstatedir	%{_var}/run/%{name}
 
 # better fix by proper linking
-%define		skip_post_check_so	lib(zebra|ospf|ospfapiclient)\.so.*
+%define		skip_post_check_so	libzebra.so.* libospf.so.* libospfapiclient.so.*
 
 %description
 Quagga is a routing software suite, providing implementations of
