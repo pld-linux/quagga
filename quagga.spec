@@ -46,7 +46,7 @@ BuildRequires:	net-snmp-devel
 BuildRequires:	pam-devel
 BuildRequires:	perl-base
 BuildRequires:	readline-devel >= 4.1
-BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	rpmbuild(macros) >= 1.583
 BuildRequires:	texinfo
 Requires(post):	/bin/hostname
 Requires(post):	/sbin/ldconfig
