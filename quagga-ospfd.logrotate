@@ -1,4 +1,5 @@
 /var/log/quagga/ospfd.log {
+	su quagga quagga
 	missingok
 	olddir /var/log/archive/quagga
 	create 640 quagga quagga
