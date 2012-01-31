@@ -8,6 +8,7 @@ Group:		Networking/Daemons
 Source0:	http://www.quagga.net/download/%{name}-%{version}.tar.gz
 # Source0-md5:	64cc29394eb8a4e24649d19dac868f64
 Source1:	%{name}.pam
+Source2:	%{name}.tmpfiles
 Source10:	%{name}-zebra.init
 Source11:	%{name}-bgpd.init
 Source12:	%{name}-ospf6d.init
@@ -236,15 +237,16 @@ Statyczne wersje bibliotek quagga.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
 install -d $RPM_BUILD_ROOT/etc/{env.d,logrotate.d,pam.d,rc.d/init.d,sysconfig} \
 	$RPM_BUILD_ROOT/var/log/{archive,}/%{name} \
-	$RPM_BUILD_ROOT%{_var}/run/%{name}
+	$RPM_BUILD_ROOT%{_var}/run/%{name} \
+	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/zebra
+install %{SOURCE2} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
 
 install %{SOURCE10} $RPM_BUILD_ROOT/etc/rc.d/init.d/zebra
 install %{SOURCE11} $RPM_BUILD_ROOT/etc/rc.d/init.d/bgpd
@@ -398,6 +400,7 @@ fi
 %dir %attr(770,root,quagga) %{_sysconfdir}
 %config(noreplace) %verify(not md5 mtime size) %attr(660,root,quagga) %{_sysconfdir}/vtysh.conf
 %config(noreplace) %verify(not md5 mtime size) %attr(660,root,quagga) %{_sysconfdir}/zebra.conf
+/usr/lib/tmpfiles.d/%{name}.conf
 %dir %attr(770,root,quagga) /var/run/%{name}
 %dir %attr(750,quagga,quagga) /var/log/%{name}
 %dir %attr(750,root,root) /var/log/archive/%{name}
