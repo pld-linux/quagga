@@ -1,0 +1,9 @@
+/var/log/quagga/babeld.log {
+	su quagga quagga
+	missingok
+	olddir /var/log/archive/quagga
+	create 640 quagga quagga
+	postrotate
+		/bin/killall -USR1 babeld >/dev/null 2>&1
+	endscript
+}
