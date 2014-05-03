@@ -1,6 +1,6 @@
---- quagga-0.99.13/configure.ac.orig	2009-07-11 19:57:36.000000000 +0200
-+++ quagga-0.99.13/configure.ac	2009-07-11 20:03:30.000000000 +0200
-@@ -951,37 +951,15 @@
+--- quagga-0.99.22.4/configure.ac	2013-09-04 21:25:43.000000000 +0200
++++ quagga-0.99.22.4.new/configure.ac	2014-05-02 18:39:27.281182113 +0200
+@@ -1050,45 +1050,15 @@
  dnl -----------------------
  dnl check proc file system.
  dnl -----------------------
@@ -20,10 +20,18 @@
  dnl check ipforward detect method
  dnl -----------------------------
 -AC_CACHE_CHECK([ipforward method], [quagga_cv_ipforward_method],
--[for quagga_cv_ipforward_method in /proc/net/snmp /dev/ip /dev/null;
--do
--  test x`ls $quagga_cv_ipforward_method 2>/dev/null` = x"$quagga_cv_ipforward_method" && break
--done
+-[if test x$cross_compiling = xyes; then
+-  if test x"$opsys" = x"gnu-linux"; then
+-    quagga_cv_ipforward_method=/proc/net/snmp
+-  else
+-    quagga_cv_ipforward_method=/dev/ip
+-  fi
+-else
+-  for quagga_cv_ipforward_method in /proc/net/snmp /dev/ip /dev/null;
+-  do
+-    test x`ls $quagga_cv_ipforward_method 2>/dev/null` = x"$quagga_cv_ipforward_method" && break
+-  done
+-fi
 -case $quagga_cv_ipforward_method in
 -  "/proc/net/snmp")  quagga_cv_ipforward_method="proc";;
 -  "/dev/ip")         
