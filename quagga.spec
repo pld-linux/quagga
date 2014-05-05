@@ -257,35 +257,35 @@ install -d $RPM_BUILD_ROOT/etc/{env.d,logrotate.d,pam.d,rc.d/init.d,sysconfig} \
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/zebra
-install %{SOURCE2} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
+cp -p %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/zebra
+cp -p %{SOURCE2} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
-install %{SOURCE10} $RPM_BUILD_ROOT/etc/rc.d/init.d/zebra
-install %{SOURCE11} $RPM_BUILD_ROOT/etc/rc.d/init.d/bgpd
-install %{SOURCE12} $RPM_BUILD_ROOT/etc/rc.d/init.d/ospf6d
-install %{SOURCE13} $RPM_BUILD_ROOT/etc/rc.d/init.d/ospfd
-install %{SOURCE14} $RPM_BUILD_ROOT/etc/rc.d/init.d/ripd
-install %{SOURCE15} $RPM_BUILD_ROOT/etc/rc.d/init.d/ripngd
-install %{SOURCE16} $RPM_BUILD_ROOT/etc/rc.d/init.d/isisd
-install %{SOURCE17} $RPM_BUILD_ROOT/etc/rc.d/init.d/babeld
+install -p %{SOURCE10} $RPM_BUILD_ROOT/etc/rc.d/init.d/zebra
+install -p %{SOURCE11} $RPM_BUILD_ROOT/etc/rc.d/init.d/bgpd
+install -p %{SOURCE12} $RPM_BUILD_ROOT/etc/rc.d/init.d/ospf6d
+install -p %{SOURCE13} $RPM_BUILD_ROOT/etc/rc.d/init.d/ospfd
+install -p %{SOURCE14} $RPM_BUILD_ROOT/etc/rc.d/init.d/ripd
+install -p %{SOURCE15} $RPM_BUILD_ROOT/etc/rc.d/init.d/ripngd
+install -p %{SOURCE16} $RPM_BUILD_ROOT/etc/rc.d/init.d/isisd
+install -p %{SOURCE17} $RPM_BUILD_ROOT/etc/rc.d/init.d/babeld
 
-install %{SOURCE20} $RPM_BUILD_ROOT/etc/sysconfig/zebra
-install %{SOURCE21} $RPM_BUILD_ROOT/etc/sysconfig/bgpd
-install %{SOURCE22} $RPM_BUILD_ROOT/etc/sysconfig/ospf6d
-install %{SOURCE23} $RPM_BUILD_ROOT/etc/sysconfig/ospfd
-install %{SOURCE24} $RPM_BUILD_ROOT/etc/sysconfig/ripd
-install %{SOURCE25} $RPM_BUILD_ROOT/etc/sysconfig/ripngd
-install %{SOURCE26} $RPM_BUILD_ROOT/etc/sysconfig/isisd
-install %{SOURCE27} $RPM_BUILD_ROOT/etc/sysconfig/babeld
+cp -p %{SOURCE20} $RPM_BUILD_ROOT/etc/sysconfig/zebra
+cp -p %{SOURCE21} $RPM_BUILD_ROOT/etc/sysconfig/bgpd
+cp -p %{SOURCE22} $RPM_BUILD_ROOT/etc/sysconfig/ospf6d
+cp -p %{SOURCE23} $RPM_BUILD_ROOT/etc/sysconfig/ospfd
+cp -p %{SOURCE24} $RPM_BUILD_ROOT/etc/sysconfig/ripd
+cp -p %{SOURCE25} $RPM_BUILD_ROOT/etc/sysconfig/ripngd
+cp -p %{SOURCE26} $RPM_BUILD_ROOT/etc/sysconfig/isisd
+cp -p %{SOURCE27} $RPM_BUILD_ROOT/etc/sysconfig/babeld
 
-install %{SOURCE30} $RPM_BUILD_ROOT/etc/logrotate.d/zebra
-install %{SOURCE31} $RPM_BUILD_ROOT/etc/logrotate.d/bgpd
-install %{SOURCE32} $RPM_BUILD_ROOT/etc/logrotate.d/ospfd
-install %{SOURCE33} $RPM_BUILD_ROOT/etc/logrotate.d/ospf6d
-install %{SOURCE34} $RPM_BUILD_ROOT/etc/logrotate.d/ripd
-install %{SOURCE35} $RPM_BUILD_ROOT/etc/logrotate.d/ripngd
-install %{SOURCE36} $RPM_BUILD_ROOT/etc/logrotate.d/isisd
-install %{SOURCE37} $RPM_BUILD_ROOT/etc/logrotate.d/babeld
+cp -p %{SOURCE30} $RPM_BUILD_ROOT/etc/logrotate.d/zebra
+cp -p %{SOURCE31} $RPM_BUILD_ROOT/etc/logrotate.d/bgpd
+cp -p %{SOURCE32} $RPM_BUILD_ROOT/etc/logrotate.d/ospfd
+cp -p %{SOURCE33} $RPM_BUILD_ROOT/etc/logrotate.d/ospf6d
+cp -p %{SOURCE34} $RPM_BUILD_ROOT/etc/logrotate.d/ripd
+cp -p %{SOURCE35} $RPM_BUILD_ROOT/etc/logrotate.d/ripngd
+cp -p %{SOURCE36} $RPM_BUILD_ROOT/etc/logrotate.d/isisd
+cp -p %{SOURCE37} $RPM_BUILD_ROOT/etc/logrotate.d/babeld
 
 touch $RPM_BUILD_ROOT/var/log/%{name}/{zebra,babeld,bgpd,isisd,ospf6d,ospfd,ripd,ripngd}.log
 
