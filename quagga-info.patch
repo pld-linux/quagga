@@ -1,8 +1,12 @@
---- quagga-0.96.4/doc/quagga.texi.orig	Tue Aug 12 14:40:20 2003
-+++ quagga-0.96.4/doc/quagga.texi	Mon Dec  1 13:34:09 2003
-@@ -34,5 +34,5 @@
-
+diff -urNp -x '*.orig' quagga-0.99.23.org/doc/quagga.texi quagga-0.99.23/doc/quagga.texi
+--- quagga-0.99.23.org/doc/quagga.texi	2014-06-24 07:14:20.000000000 +0200
++++ quagga-0.99.23/doc/quagga.texi	2023-02-02 08:51:23.328557391 +0100
+@@ -33,7 +33,7 @@ approved by Kunihiro Ishiguro.
+ @end copying
+ 
  @c Info entry
 -@dircategory Routing Software:
 +@dircategory Network utilities:
  @direntry
+ * @value{PACKAGE_NAME}: (quagga).		The Quagga Software Routing Suite
+ @end direntry
