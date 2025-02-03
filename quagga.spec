@@ -38,6 +38,7 @@ Patch1:		%{name}-proc.patch
 Patch2:		%{name}-vtysh-pam.patch
 Patch3:		%{name}-readline.patch
 Patch4:		snmp-api.patch
+Patch5:		includes.patch
 URL:		http://www.quagga.net/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
@@ -218,6 +219,7 @@ Statyczne wersje bibliotek quagga.
 %patch -P2 -p1
 %patch -P3 -p1
 %patch -P4 -p1
+%patch -P5 -p1
 
 %build
 %{__libtoolize}
