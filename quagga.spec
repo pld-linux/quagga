@@ -249,11 +249,11 @@ install -d $RPM_BUILD_ROOT/etc/{env.d,logrotate.d,pam.d,rc.d/init.d,sysconfig} \
 	$RPM_BUILD_ROOT%{systemdtmpfilesdir}
 
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
+	DESTDIR=$RPM_BUILD_ROOT \
+	AM_UPDATE_INFO_DIR=no
 
 # samples are shipped as documentation from the source tree
 %{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/*.conf.sample*
-%{__rm} $RPM_BUILD_ROOT%{_infodir}/dir
 
 cp -p %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/zebra
 cp -p %{SOURCE2} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
