@@ -1,21 +1,6 @@
---- quagga-0.99.22.4/configure.ac	2013-09-04 21:25:43.000000000 +0200
-+++ quagga-0.99.22.4.new/configure.ac	2014-05-02 18:39:27.281182113 +0200
-@@ -1050,45 +1050,15 @@
- dnl -----------------------
- dnl check proc file system.
- dnl -----------------------
--if test "$netlink" != yes; then
--  if test -r /proc/net/dev; then
-     AC_DEFINE(HAVE_PROC_NET_DEV,,/proc/net/dev)
-     IF_PROC=if_proc.o
--  fi
--  if test -r /proc/net/if_inet6; then
-     AC_DEFINE(HAVE_PROC_NET_IF_INET6,,/proc/net/if_inet6)
--    IF_PROC=if_proc.o
--  fi
--fi
- AC_SUBST(IF_PROC)
- 
+--- quagga-1.2.4.orig/configure.ac	2018-02-19 22:24:55.000000000 +0100
++++ quagga-1.2.4/configure.ac	2026-10-29 00:57:22.279085424 +0100
+@@ -1121,29 +1121,7 @@
  dnl -----------------------------
  dnl check ipforward detect method
  dnl -----------------------------
@@ -36,7 +21,6 @@
 -  "/proc/net/snmp")  quagga_cv_ipforward_method="proc";;
 -  "/dev/ip")         
 -                     case "$host" in
--                       *-nec-sysv4*)  quagga_cv_ipforward_method="ews";;
 -                       *-freebsd*)    quagga_cv_ipforward_method="sysctl";;
 -                       *)             quagga_cv_ipforward_method="solaris";;
 -                     esac;;

@@ -1,12 +1,12 @@
 Summary:	Routing Software Suite
 Summary(pl.UTF-8):	Zestaw oprogramowania do routingu
 Name:		quagga
-Version:	0.99.23
-Release:	12
+Version:	1.2.4
+Release:	1
 License:	GPL v2+
 Group:		Networking/Daemons
-Source0:	http://download.savannah.gnu.org/releases/quagga/%{name}-%{version}.tar.xz
-# Source0-md5:	92dff03272aa9127ac13c6bea9c66187
+Source0:	https://github.com/Quagga/quagga/releases/download/%{name}-%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	eced21b054d71c9e1b7c6ac43286a166
 Source1:	%{name}.pam
 Source2:	%{name}.tmpfiles
 Source10:	%{name}-zebra.init
@@ -16,7 +16,6 @@ Source13:	%{name}-ospfd.init
 Source14:	%{name}-ripd.init
 Source15:	%{name}-ripngd.init
 Source16:	%{name}-isisd.init
-Source17:	%{name}-babeld.init
 Source20:	%{name}-zebra.sysconfig
 Source21:	%{name}-bgpd.sysconfig
 Source22:	%{name}-ospf6d.sysconfig
@@ -24,7 +23,6 @@ Source23:	%{name}-ospfd.sysconfig
 Source24:	%{name}-ripd.sysconfig
 Source25:	%{name}-ripngd.sysconfig
 Source26:	%{name}-isisd.sysconfig
-Source27:	%{name}-babeld.sysconfig
 Source30:	%{name}-zebra.logrotate
 Source31:	%{name}-bgpd.logrotate
 Source32:	%{name}-ospfd.logrotate
@@ -32,17 +30,20 @@ Source33:	%{name}-ospf6d.logrotate
 Source34:	%{name}-ripd.logrotate
 Source35:	%{name}-ripngd.logrotate
 Source36:	%{name}-isisd.logrotate
-Source37:	%{name}-babeld.logrotate
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-proc.patch
 Patch2:		%{name}-vtysh-pam.patch
 Patch3:		%{name}-readline.patch
-Patch4:		snmp-api.patch
-Patch5:		includes.patch
-URL:		http://www.quagga.net/
+Patch4:		CVE-2022-37032.patch
+Patch5:		CVE-2023-41358.patch
+Patch6:		CVE-2023-46753.patch
+Patch7:		CVE-2024-44070.patch
+Patch8:		%{name}-packed.patch
+URL:		https://www.nongnu.org/quagga/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
 BuildRequires:	gawk
+BuildRequires:	libcap-devel
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel >= 5.1
 BuildRequires:	net-snmp-devel
@@ -69,6 +70,7 @@ Obsoletes:	bird
 Obsoletes:	gated
 Obsoletes:	mrt
 Obsoletes:	quagga
+Obsoletes:	quagga-babeld < 1.0
 Obsoletes:	zebra-xs26
 Conflicts:	logrotate < 3.8.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -96,19 +98,6 @@ tylko kilka. Quagga to odgałęzienie projektu GNU Zebra, który był
 rozwijany przez Kunihiro Ishiguro. Celem drzewa Quagga jest
 zgromadzenie bardziej zaangażowanej społeczności wokół projektu, niż w
 aktualnie scentralizowanym modelu GNU Zebry.
-
-%package babeld
-Summary:	BABEL wireless mesh routing daemon
-Summary(pl.UTF-8):	Demon routingu BABEL
-Group:		Networking/Daemons
-Requires(post,preun):	/sbin/chkconfig
-Requires:	%{name} = %{version}-%{release}
-
-%description babeld
-BABEL wireless mesh routing daemon. Includes IPv6 support.
-
-%description babeld -l pl.UTF-8
-Demon obsługi protokołu BABEL. Obsługuje także IPv6.
 
 %package bgpd
 Summary:	BGP routing daemon
@@ -220,6 +209,9 @@ Statyczne wersje bibliotek quagga.
 %patch -P3 -p1
 %patch -P4 -p1
 %patch -P5 -p1
+%patch -P6 -p1
+%patch -P7 -p1
+%patch -P8 -p1
 
 %build
 %{__libtoolize}
@@ -227,15 +219,13 @@ Statyczne wersje bibliotek quagga.
 %{__autoconf}
 %{__automake}
 %{__autoheader}
+# pre-C23 code: ospf_router_info_unregister() is defined with () and called with an argument
 %configure \
-	--enable-ipv6 \
+	CFLAGS="%{rpmcflags} -std=gnu17" \
 	--enable-vtysh \
-	--enable-netlink \
 	--enable-snmp \
-	--enable-opaque-lsa \
 	--enable-ospfapi=yes \
 	--enable-ospfclient=yes \
-	--enable-ospf-te \
 	--enable-multipath=64 \
 	--enable-user=quagga \
 	--enable-group=quagga \
@@ -244,6 +234,8 @@ Statyczne wersje bibliotek quagga.
 	--enable-isisd \
 	--disable-isis-topology \
 	--enable-irdp \
+	--disable-nhrpd \
+	--disable-pimd \
 	--disable-watchquagga \
 	--with-libpam
 
@@ -259,6 +251,10 @@ install -d $RPM_BUILD_ROOT/etc/{env.d,logrotate.d,pam.d,rc.d/init.d,sysconfig} \
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+# samples are shipped as documentation from the source tree
+%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/*.conf.sample*
+%{__rm} $RPM_BUILD_ROOT%{_infodir}/dir
+
 cp -p %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/zebra
 cp -p %{SOURCE2} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
@@ -269,7 +265,6 @@ install -p %{SOURCE13} $RPM_BUILD_ROOT/etc/rc.d/init.d/ospfd
 install -p %{SOURCE14} $RPM_BUILD_ROOT/etc/rc.d/init.d/ripd
 install -p %{SOURCE15} $RPM_BUILD_ROOT/etc/rc.d/init.d/ripngd
 install -p %{SOURCE16} $RPM_BUILD_ROOT/etc/rc.d/init.d/isisd
-install -p %{SOURCE17} $RPM_BUILD_ROOT/etc/rc.d/init.d/babeld
 
 cp -p %{SOURCE20} $RPM_BUILD_ROOT/etc/sysconfig/zebra
 cp -p %{SOURCE21} $RPM_BUILD_ROOT/etc/sysconfig/bgpd
@@ -278,7 +273,6 @@ cp -p %{SOURCE23} $RPM_BUILD_ROOT/etc/sysconfig/ospfd
 cp -p %{SOURCE24} $RPM_BUILD_ROOT/etc/sysconfig/ripd
 cp -p %{SOURCE25} $RPM_BUILD_ROOT/etc/sysconfig/ripngd
 cp -p %{SOURCE26} $RPM_BUILD_ROOT/etc/sysconfig/isisd
-cp -p %{SOURCE27} $RPM_BUILD_ROOT/etc/sysconfig/babeld
 
 cp -p %{SOURCE30} $RPM_BUILD_ROOT/etc/logrotate.d/zebra
 cp -p %{SOURCE31} $RPM_BUILD_ROOT/etc/logrotate.d/bgpd
@@ -287,11 +281,10 @@ cp -p %{SOURCE33} $RPM_BUILD_ROOT/etc/logrotate.d/ospf6d
 cp -p %{SOURCE34} $RPM_BUILD_ROOT/etc/logrotate.d/ripd
 cp -p %{SOURCE35} $RPM_BUILD_ROOT/etc/logrotate.d/ripngd
 cp -p %{SOURCE36} $RPM_BUILD_ROOT/etc/logrotate.d/isisd
-cp -p %{SOURCE37} $RPM_BUILD_ROOT/etc/logrotate.d/babeld
 
-touch $RPM_BUILD_ROOT/var/log/%{name}/{zebra,babeld,bgpd,isisd,ospf6d,ospfd,ripd,ripngd}.log
+touch $RPM_BUILD_ROOT/var/log/%{name}/{zebra,bgpd,isisd,ospf6d,ospfd,ripd,ripngd}.log
 
-touch $RPM_BUILD_ROOT%{_sysconfdir}/{vtysh,zebra,babeld,bgpd,isisd,ospf6d,ospfd,ripd,ripngd}.conf
+touch $RPM_BUILD_ROOT%{_sysconfdir}/{vtysh,zebra,bgpd,isisd,ospf6d,ospfd,ripd,ripngd}.conf
 
 echo '#VTYSH_PAGER="less -FX"' > $RPM_BUILD_ROOT/etc/env.d/VTYSH_PAGER
 
@@ -312,13 +305,6 @@ if [ ! -s %{_sysconfdir}/zebra.conf ]; then
 	echo "hostname `hostname`" > %{_sysconfdir}/zebra.conf
 fi
 %service zebra restart "main routing daemon"
-
-%post babeld
-/sbin/chkconfig --add babeld >&2
-if [ ! -s %{_sysconfdir}/babeld.conf ]; then
-        echo "hostname `hostname`" > %{_sysconfdir}/babeld.conf
-fi
-%service babeld restart "babeld routing daemon"
 
 %post bgpd
 /sbin/chkconfig --add bgpd >&2
@@ -366,12 +352,6 @@ fi
 if [ "$1" = "0" ]; then
 	%service zebra stop
 	/sbin/chkconfig --del zebra >&2
-fi
-
-%preun babeld
-if [ "$1" = "0" ]; then
-        %service babeld stop
-        /sbin/chkconfig --del babeld >&2
 fi
 
 %preun bgpd
@@ -435,23 +415,17 @@ fi
 %dir %attr(750,quagga,quagga) /var/log/%{name}
 %dir %attr(750,quagga,quagga) /var/log/archive/%{name}
 %attr(755,root,root) %{_libdir}/lib*.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/lib*.so.0
+%attr(755,root,root) %ghost %{_libdir}/libfpm_pb.so.0
+%attr(755,root,root) %ghost %{_libdir}/libospf.so.0
+%attr(755,root,root) %ghost %{_libdir}/libospfapiclient.so.0
+%attr(755,root,root) %ghost %{_libdir}/libquagga_pb.so.0
+%attr(755,root,root) %ghost %{_libdir}/libzebra.so.1
 %doc zebra/*sample*
 %{_mandir}/man8/zebra*
 %attr(755,root,root) %{_sbindir}/zebra
 %attr(754,root,root) /etc/rc.d/init.d/zebra
 %config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/sysconfig/zebra
 %ghost /var/log/%{name}/zebra*
-
-%files babeld
-%defattr(644,root,root,755)
-%doc babeld/*sample*
-%attr(755,root,root) %{_sbindir}/babeld
-%attr(754,root,root) /etc/rc.d/init.d/babeld
-%config(noreplace) %verify(not md5 mtime size) %attr(660,root,quagga) %{_sysconfdir}/babeld.conf
-%config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/sysconfig/babeld
-%config(noreplace) %verify(not md5 mtime size) %attr(640,root,root) /etc/logrotate.d/babeld
-%ghost /var/log/%{name}/babeld*
 
 %files bgpd
 %defattr(644,root,root,755)

@@ -1,0 +1,14 @@
+lib: __packed is a BSD <sys/cdefs.h> macro; on glibc it declares a global
+variable in every object and libzebra fails to link with -fno-common.
+
+--- quagga-1.2.4.orig/lib/prefix.h	2026-10-29 01:01:14.389999999 +0100
++++ quagga-1.2.4/lib/prefix.h	2026-10-29 01:01:14.396666666 +0100
+@@ -44,7 +44,7 @@
+  */
+ struct ethaddr {
+     u_char octet[ETHER_ADDR_LEN];
+-} __packed;
++} __attribute__ ((packed));
+ 
+ 
+ /*
